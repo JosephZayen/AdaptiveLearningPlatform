@@ -8,6 +8,8 @@ JSON_PATH = BASE_DIR / r"project.json"
 SEARCH_PATH = BASE_DIR / r"search.txt"
 LOG_PATH = BASE_DIR / r"logs.txt"
 
+SEARCH_SUFFIXES = [".py", ".txt", ".md", ".c", ".html", ".css", ".js"]
+
 
 project = {}
 store = []
@@ -55,12 +57,17 @@ while(True):
     text += ipt + "\n"
 
 lst = text.split(",")
+print(lst)
+print(100)
 
 logs = []
+searches = {}
 
 for search_item in lst:
+    if not search_item.strip():
+        continue
     try:
-        results = BASE_DIR.glob(search_item)
+        results = BASE_DIR.glob(search_item.strip())
     except Exception as e:
         error_reason = {}
         error_reason["type"] = type(e).name
@@ -68,10 +75,19 @@ for search_item in lst:
         error_reason["traceback"] = traceback.format_exc()
         logs.append(error_reason)
     for result in results:
-        pass
+        if result.suffix in SEARCH_SUFFIXES:
+            with result.open("r", encoding="utf-8") as f:
+                searches[result.as_posix()] = f.read()
 
 logs_json = json.dumps(logs, indent=2, ensure_ascii=False)
 now = datetime.now(timezone.utc).timestamp() * 1000
 with LOG_PATH.open("a", encoding="utf-8") as f:
-    f.write(str(now) + "\n"*5)
-    f.write(logs_json)
+    f.write(str(now) + "\n")
+    f.write(logs_json + "\n"*10)
+
+
+searches_json = json.dumps(searches, indent=2, ensure_ascii=False)
+now = datetime.now(timezone.utc).timestamp() * 1000
+with SEARCH_PATH.open("a", encoding="utf-8") as f:
+    f.write(str(now) + "\n")
+    f.write(searches_json + "\n"*10)

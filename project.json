@@ -222,6 +222,7 @@
       ]
     },
     "instance.sqlite",
+    "logs.txt",
     "main.py",
     "models.py",
     {
@@ -240,16 +241,19 @@
         {
           "MA": []
         },
+        "make_project_json.py",
         {
           "projectPlan": [
             "架构.txt",
             "部署回忆.txt"
           ]
-        }
+        },
+        "try.py"
       ]
     },
     "project.json",
     "requirements.txt",
+    "search.txt",
     {
       "static": [
         {
