@@ -15,7 +15,7 @@ def login():
             user = users.first()
         if user and check_password_hash(user.pwd_hash, pwd):
             session["uid"] = user.id
-            return redirect(url_for("personal_bp.main"))
+            return redirect(url_for("home"))
         else:
             flash("incorrect input")
             return {"status": "failed"}, 400
@@ -40,7 +40,7 @@ def register():
                 db_session.add(user)
                 db_session.commit()
                 session["uid"] = id
-                return redirect(url_for("personal_bp.main"))
+                return redirect(url_for("home"))
     else:
         return render_template("register.html")
 
