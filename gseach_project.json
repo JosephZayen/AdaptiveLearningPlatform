@@ -1,0 +1,288 @@
+{
+  "AdaptiveLearningPlatform": [
+    {
+      "blueprints": [
+        {
+          "ai_textbook_factory": [
+            "already_has_labeled_index.py",
+            "config.py",
+            "gen.py",
+            {
+              "get_textbook_index": [
+                "clean.mjs",
+                "configs.mjs",
+                "CSS权威指南目录.json",
+                "CSS权威指南目录labeled.txt",
+                "main.mjs"
+              ]
+            },
+            "latexer.py",
+            "main.py",
+            {
+              "pdf_plain_text": [
+                "cleanText.txt",
+                "clean_text.py",
+                "config.py",
+                "deepseek.py",
+                "ds.txt",
+                "extract.txt",
+                "extract_pdf.py",
+                "fluent python.pdf",
+                "prompt.txt",
+                {
+                  "__pycache__": [
+                    "config.cpython-313.pyc"
+                  ]
+                }
+              ]
+            },
+            {
+              "processing": [
+                "ai_corrected.txt",
+                "ai_textbook.txt",
+                "labeled.txt",
+                "latex.txt",
+                "LATEX模板.txt",
+                "raw_text.txt",
+                "syntax_clean.txt",
+                "土壤地理学教材目录.txt",
+                "普通地质学.pdf"
+              ]
+            },
+            {
+              "purge": [
+                "ai_cleaner.py",
+                "clean.py",
+                "cleaner.py",
+                "clean_n.py",
+                "clean_spaces.py",
+                "__init__.py",
+                {
+                  "__pycache__": [
+                    "ai_cleaner.cpython-313.pyc",
+                    "clean.cpython-313.pyc",
+                    "cleaner.cpython-313.pyc",
+                    "clean_n.cpython-313.pyc",
+                    "clean_spaces.cpython-313.pyc",
+                    "__init__.cpython-313.pyc"
+                  ]
+                }
+              ]
+            },
+            "ReadMe.md",
+            "__init__.py"
+          ]
+        },
+        {
+          "auth": [
+            {
+              "templates": [
+                "login.html",
+                "register.html"
+              ]
+            },
+            "__init__.py",
+            {
+              "__pycache__": [
+                "__init__.cpython-313.pyc"
+              ]
+            }
+          ]
+        },
+        {
+          "calendar": [
+            "calendar.py",
+            {
+              "static": [
+                {
+                  "css": [
+                    "analysis.css"
+                  ]
+                },
+                {
+                  "img": [
+                    "angel.jpg",
+                    "bed.jpg",
+                    "green.jpg",
+                    "night.jpg",
+                    "stream.jpg",
+                    "wire.jpg"
+                  ]
+                },
+                {
+                  "js": [
+                    {
+                      "anki": [
+                        "anki.js"
+                      ]
+                    },
+                    {
+                      "calendar": [
+                        "calendar.mjs",
+                        "calendar_reference.txt",
+                        "configs.mjs",
+                        "fetch.mjs",
+                        "index.mjs",
+                        "index.txt",
+                        "notification.mjs"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "templates": [
+                "anki.html",
+                "base.html",
+                "calendar.html"
+              ]
+            },
+            "__init__.py",
+            {
+              "__pycache__": [
+                "anki.cpython-310.pyc",
+                "anki.cpython-312.pyc",
+                "anki.cpython-313.pyc",
+                "calendar.cpython-310.pyc",
+                "calendar.cpython-312.pyc",
+                "calendar.cpython-313.pyc",
+                "N_BACK.cpython-310.pyc",
+                "N_BACK.cpython-312.pyc",
+                "N_BACK.cpython-313.pyc",
+                "structured.cpython-312.pyc",
+                "structured.cpython-313.pyc",
+                "__init__.cpython-310.pyc",
+                "__init__.cpython-312.pyc",
+                "__init__.cpython-313.pyc"
+              ]
+            }
+          ]
+        },
+        {
+          "paper_checker": [
+            "app.py",
+            "askai.py",
+            "clear_answers.py",
+            "configs.py",
+            "gen.py",
+            {
+              "get_rid_of_answer": [
+                "get_rid_of_answer.py",
+                "test.txt"
+              ]
+            },
+            "long_ankicards.txt",
+            "messages.txt",
+            "paper.txt",
+            "paper_checker.py",
+            "questions.txt",
+            "raw_ai_answer.txt",
+            "readme.txt",
+            "short_ankicards.txt",
+            {
+              "static": [
+                {
+                  "css": [
+                    "base.css"
+                  ]
+                },
+                {
+                  "img": []
+                },
+                {
+                  "js": [
+                    "chat.js"
+                  ]
+                }
+              ]
+            },
+            "std_answer.txt",
+            {
+              "templates": [
+                "base.html",
+                "HTML源码疑惑.txt",
+                "paper.html"
+              ]
+            },
+            "user_answer.txt",
+            "__init__.py",
+            {
+              "__pycache__": [
+                "app.cpython-313.pyc",
+                "askai.cpython-313.pyc",
+                "__init__.cpython-313.pyc"
+              ]
+            }
+          ]
+        },
+        {
+          "sm2": []
+        }
+      ]
+    },
+    "instance.sqlite",
+    "logs.txt",
+    "main.py",
+    "models.py",
+    {
+      "other": [
+        {
+          "JS+CSS": [
+            "CSS权威指南.txt",
+            "CSS权威指南目录labeled.txt",
+            "JS高级程序语言设计中文.txt",
+            "JS高级语言设计目录labeled.txt",
+            "常用HTML标签",
+            "流畅的Python.txt",
+            "流畅的python目录.txt"
+          ]
+        },
+        "logs.txt",
+        {
+          "MA": []
+        },
+        "make_project_json.py",
+        "project.json",
+        {
+          "projectPlan": [
+            "架构.txt",
+            "部署回忆.txt"
+          ]
+        },
+        "search.txt",
+        "try.py"
+      ]
+    },
+    "project.json",
+    "requirements.txt",
+    "search.txt",
+    {
+      "static": [
+        {
+          "css": []
+        },
+        {
+          "img": [
+            "favicon-32x32.png"
+          ]
+        },
+        {
+          "js": []
+        }
+      ]
+    },
+    {
+      "templates": [
+        "main.html"
+      ]
+    },
+    "try.py",
+    "__init__.py",
+    {
+      "__pycache__": [
+        "models.cpython-313.pyc"
+      ]
+    }
+  ]
+}

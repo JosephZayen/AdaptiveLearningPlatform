@@ -20,7 +20,7 @@ def login():
             flash("incorrect input")
             return {"status": "failed"}, 400
     else:
-        return render_template("login.html")
+        return render_template("auth/login.html")
 
 @auth_bp.route("/register",methods=["GET","POST"])
 def register():
@@ -31,7 +31,8 @@ def register():
         if custom_id is not None and pwd is not None and name is not None:
             stmt = select(User.id).where(User.custom_id == custom_id)
             ids = db_session.scalars(stmt)
-            id = ids.first() if ids.first() else None
+            first = ids.first()
+            id = first if first else None
             if id is not None:
                 flash("user already exists")
                 return {"status": "failed"}, 400
@@ -42,6 +43,6 @@ def register():
                 session["uid"] = id
                 return redirect(url_for("home"))
     else:
-        return render_template("register.html")
+        return render_template("auth/register.html")
 
 

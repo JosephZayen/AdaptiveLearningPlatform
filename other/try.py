@@ -58,7 +58,6 @@ while(True):
 
 lst = text.split(",")
 print(lst)
-print(100)
 
 logs = []
 searches = {}
@@ -86,8 +85,10 @@ with LOG_PATH.open("a", encoding="utf-8") as f:
     f.write(logs_json + "\n"*10)
 
 
-searches_json = json.dumps(searches, indent=2, ensure_ascii=False)
 now = datetime.now(timezone.utc).timestamp() * 1000
-with SEARCH_PATH.open("a", encoding="utf-8") as f:
+with SEARCH_PATH.open("w", encoding="utf-8") as f:
     f.write(str(now) + "\n")
-    f.write(searches_json + "\n"*10)
+    searches_text = ""
+    for key, val in searches.items():
+        searches_text += key + "\n\n" + val + "\n"*5
+    f.write(searches_text)

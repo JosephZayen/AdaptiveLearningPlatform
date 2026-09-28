@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+<!-- calendar base html -->
 <head>
   <meta charset="UTF-8">
   <title> {% block title %}weatherdoll{% endblock %} </title>
@@ -10,8 +11,7 @@
         height: 100%;
         overflow: hidden; /* 禁止整个页面滚动 */
         font-family: Arial, sans-serif;
-        background: url("{{ url_for('personal_bp.static', filename='img/angel.jpg')}}")
-          no-repeat center/cover fixed;
+        background: url("{{ url_for('static', filename='img/night.jpg')}}") no-repeat center/cover fixed;
       }
 
     .outer-container {
@@ -95,7 +95,8 @@
       <div class="chat-container">
         <div class="inner-container">
           <nav class="inner-sidebar">
-            <div><a target="_self" href="{{url_for('personal_bp.calendar')}}">calendar</a></div>
+            <div><a target="_self" href="{{url_for('calendar_bp.calendar')}}">calendar</a></div>
+            <div><a target="_self" href="{{url_for('paper_bp.paper')}}">paper checker</a></div>
           <!--  <div><a target="_self" href="">anki</a></div> -->
           </nav>
 

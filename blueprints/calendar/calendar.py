@@ -29,7 +29,8 @@ def calendar():
     login_required = check_login()
     if login_required:
         return login_required
-    return render_template("calendar.html")
+    print("calendar")
+    return render_template("calendar/calendar.html")
 
 @calendar_bp.route("/api/search")
 def search_events():
@@ -37,9 +38,9 @@ def search_events():
     local_date = request.args.get("local_date")
     print("local_date", local_date)
     print("uid: ", uid)
-    stmt = select(Event).join(User).where(local_date == local_date).where(User.id == uid)
+    stmt = select(Event).join(User).where(Event.local_date == local_date).where(User.id == uid)
     events = []
-    for event in session.scalars(stmt):
+    for event in db_session.scalars(stmt):
         events.append({"timestamp": event.timestamp, "description":event.description, 
                        "id": event.id, "local_date": event.local_date})
         print({"timestamp": event.timestamp, "description":event.description, 

@@ -30,7 +30,7 @@ export class Calendar{
     handler(ev){
         if(ev.target.closest("td")){
             const el = ev.target.closest("td");
-            if (el.textContent) {            
+            if (el?.textContent) {            
                 this.select(el.textContent ? el.textContent : "");
                 this.renderTable(); 
                 this.initCanvas();

@@ -238,16 +238,19 @@
             "流畅的python目录.txt"
           ]
         },
+        "logs.txt",
         {
           "MA": []
         },
         "make_project_json.py",
+        "project.json",
         {
           "projectPlan": [
             "架构.txt",
             "部署回忆.txt"
           ]
         },
+        "search.txt",
         "try.py"
       ]
     },

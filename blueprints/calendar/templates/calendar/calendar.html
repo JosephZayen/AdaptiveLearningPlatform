@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "main/base.html" %}
 
 {% block title %}
 calendar
@@ -127,5 +127,5 @@ html {
 {% endblock %}
 
 {% block js %}
-<script type="module" src="{{url_for('personal_bp.static', filename='js/calendar/index.mjs')}}"></script>
+<script type="module" src="{{url_for('calendar_bp.static', filename='js/index.mjs')}}"></script>
 {% endblock %}
