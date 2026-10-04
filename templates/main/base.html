@@ -14,12 +14,12 @@
         background: url("{{ url_for('static', filename='img/night.jpg')}}") no-repeat center/cover fixed;
       }
 
-    .outer-container {
+    .main-outer-container {
         display: flex;
         height: 100vh;
     }
 
-    .outer-sidebar {
+    .main-outer-sidebar {
         width: 100px;
         background-color: rgba(121, 125, 128, 0.2);
         display: flex;
@@ -30,18 +30,18 @@
         align-items:center;
     }
 
-    .outer-sidebar div {
+    .main-outer-sidebar div {
         margin-bottom: 10px;
     }
 
-    .chat-container {
+    .main-chat-container {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
         padding: 10px;
     }
 
-    .inner-container {
+    .main-inner-container {
         display: flex;
         flex-grow: 1;
         border: 1px solid #ccc;
@@ -49,26 +49,26 @@
         box-sizing: border-box;
     }
 
-    .inner-sidebar {
+    .main-inner-sidebar {
         width:100px;
         background-color: rgba(245, 241, 241,0.2);
         overflow-y: auto; /* 内部侧边栏可滚动 */
     }
 
-    .inner-sidebar div{
+    .main-inner-sidebar div{
         margin-bottom:10px;
         margin-top:10px;
         margin-left:10px;
     }
 
-    .inner-content {
+    .main-inner-content {
         flex-grow: 1;
         padding: 10px;
         overflow-y: auto; /* 内部工作区可滚动 */
         background-color: rgba(238, 242, 243, 0.03)
     }
 
-    .input-field {
+    .main-input-field {
         margin-top: 10px;
     }
 
@@ -83,29 +83,28 @@
 </head>
 <body>
 
-  <div class="outer-container">
+  <div class="main-outer-container">
 
     <aside>
-      <div class="outer-sidebar">
+      <div class="main-outer-sidebar">
         <div>site</div>
       </div>
     </aside>
 
     <main>
-      <div class="chat-container">
-        <div class="inner-container">
-          <nav class="inner-sidebar">
+      <div class="main-chat-container">
+        <div class="main-inner-container">
+          <nav class="main-inner-sidebar">
             <div><a target="_self" href="{{url_for('calendar_bp.calendar')}}">calendar</a></div>
-            <div><a target="_self" href="{{url_for('paper_bp.paper')}}">paper checker</a></div>
           <!--  <div><a target="_self" href="">anki</a></div> -->
           </nav>
 
-          <div class="inner-content">
+          <div class="main-inner-content">
             {% block content %}{% endblock %}
           </div>
         </div>
 
-        <div class="input-field">
+        <div class="main-input-field">
           <input type="text" placeholder="请输入内容...">
         </div>
       </div>

@@ -1,4 +1,4 @@
-.aider*
+**/.aider*
 
 #一些可能含隐私信息的玩意
 *.pdf
@@ -7,3 +7,5 @@
 */*.txt
 *.txt
 
+__pycache__
+**/try*
