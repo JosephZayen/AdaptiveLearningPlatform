@@ -11,13 +11,19 @@
         height: 100%;
         overflow: hidden; /* 禁止整个页面滚动 */
         font-family: Arial, sans-serif;
-        background: url("{{ url_for('static', filename='img/night.jpg')}}") no-repeat center/cover fixed;
-      }
+        background: url("{{ url_for('static', filename='img/coding.avif')}}") no-repeat center/cover fixed;
+    }
 
+    a {
+      text-decoration: none;
+    }
+
+    /*
     .main-outer-container {
         display: flex;
-        height: 100vh;
+        height: 100%;
     }
+    
 
     .main-outer-sidebar {
         width: 100px;
@@ -29,13 +35,18 @@
         box-sizing:border-box;
         align-items:center;
     }
+    
 
     .main-outer-sidebar div {
         margin-bottom: 10px;
     }
+    */
 
     .main-chat-container {
-        flex-grow: 1;
+        /* 
+          flex-grow: 1;
+        */
+        height: 100%;
         display: flex;
         flex-direction: column;
         padding: 10px;
@@ -68,10 +79,6 @@
         background-color: rgba(238, 242, 243, 0.03)
     }
 
-    .main-input-field {
-        margin-top: 10px;
-    }
-
     input[type="text"] {
         width: 40%;
         display:block;
@@ -83,38 +90,29 @@
 </head>
 <body>
 
-  <div class="main-outer-container">
-
+  <!--  <div class="main-outer-container">  -->
+  <!--
     <aside>
       <div class="main-outer-sidebar">
         <div>site</div>
       </div>
     </aside>
+  -->
+    
+    <div class="main-chat-container">
+      <div class="main-inner-container">
+        <nav class="main-inner-sidebar">
+          <div><a target="_self" href="{{url_for('calendar_bp.calendar')}}">calendar</a></div>
+          <div><a target="_self" href="{{url_for('chat_bp.chat')}}">chat</a></div>
+        </nav>
 
-    <main>
-      <div class="main-chat-container">
-        <div class="main-inner-container">
-          <nav class="main-inner-sidebar">
-            <div><a target="_self" href="{{url_for('calendar_bp.calendar')}}">calendar</a></div>
-          <!--  <div><a target="_self" href="">anki</a></div> -->
-          </nav>
-
-          <div class="main-inner-content">
-            {% block content %}{% endblock %}
-          </div>
-        </div>
-
-        <div class="main-input-field">
-          <input type="text" placeholder="请输入内容...">
+        <div class="main-inner-content">
+          {% block content %}{% endblock %}
         </div>
       </div>
-    </main>
+    </div>
 
-  </div>
-
-  <script>
-    window.BASE_URL = ""
-  </script>
+  <!-- </div> -->
 {% block js %}{% endblock %}
 </body>
 </html>

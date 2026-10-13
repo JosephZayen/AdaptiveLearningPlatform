@@ -1,2 +1,2 @@
 //url to search events
-export const BASE_URL = window.BASE_URL + "/personalSpace";
+export const BASE_URL = "/calendar";

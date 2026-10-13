@@ -66,6 +66,7 @@ class ChatSession(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     user: Mapped["User"] = relationship(back_populates="chat_sessions")
+    local_date: Mapped[str]
     json_data: Mapped[str]
 
 
