@@ -14,6 +14,10 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(calendar_bp)
 app.register_blueprint(chat_bp)
 
+
+
+
+
 @app.route("/", methods=["GET"])
 def index():
     return redirect(url_for("auth_bp.login"))
