@@ -6,6 +6,16 @@
 *.doc
 */*.txt
 *.txt
-
+#缓存
 __pycache__
+#测试文件
 **/try*
+#测试目录
+/other/
+#数据库
+*.sqlite
+
+/gsearch*
+
+
+

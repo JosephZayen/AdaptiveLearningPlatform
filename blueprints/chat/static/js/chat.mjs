@@ -1,6 +1,5 @@
 const sidebar = document.getElementById("chat-sidebar");
 const messages = document.getElementById("messages");
-const inputArea = document.getElementById("inputarea");
 let chatSessions = null;
 
 
@@ -10,6 +9,7 @@ let chatSessions = null;
 document.addEventListener("DOMContentLoaded", async ()=>{
 })
 
+//这是错的，我改了HTML结构
 inputArea.addEventListener((ev)=>{
     const btn = ev.target.closest(".input-button");
     const inputTarget = document.querySelector(".inputarea");
@@ -40,6 +40,8 @@ class Board {
         //状态码
         this.FAILURE = 1
         this.SUCCESS = 0
+        //默认模型参数
+        this.modelReasoning = "disabled";
         //日期挂载到this.todayStr里面
         const today = new Date()
         const localDate = `${today.getFullYear()}-${parseInt(today.getFullMonth()+1).padStart(2, "0")}-${parseInt(today.getDate()).padStart(2, "0")}`;
@@ -138,6 +140,7 @@ class Board {
         //获取聊天对象数据，然后渲染
         const chat = this.data[chatId];
         const msgs = chat["chat_json"];
+        /* JOB: 这里需要改渲染逻辑, messageFrame那种 */
         msgs.forEach((msg)=>{
             const p = document.createElement("p");
             p.textContent = `${msg["role"]}:\n\n${msg["content"]}`;
@@ -175,12 +178,18 @@ class Board {
                     this.messagesArea.appendChild(newMessageFrame);
                 }
             });
+            //初始化模型参数选择器的监听器
+            const reasoningSelector = this.reasoningSelectTag;
+            reasoningSelector.addEventListener("change", (ev)=>{
+                const rs = ev.target.closest("#reasoning-selector");
+                if(rs){
+                    this.modelReasoning = rs.getAttribute("value") | "disabled";
+                }
+            })
             resolve();
         });
     } 
 
-
-    
 
     createMessageFrame(){
         /*  读一下伪元素那块，看懂下面这句话：
@@ -242,7 +251,29 @@ class Board {
         */
     }
 
+    messagesAreaInit(){
+        const messagesArea = this.messagesArea;
+        messagesArea.addEventListener("click", (ev)=>{
+            //  我这ev.target没错吧
+            //没错，result应该是个特殊的属性
+            const target = ev.target;
+            const msgFrame = target.closest(".message-frame");
+            const msgId = msgFrame.dataset.msgId;
+            if(target.closest(".message-edit-btn")){
+                msgEditHandler(msgId);
+            } else if(target.closest(".message-delete-btn")){
+                msgDeleteHandler(msgId);
+            }
+        });
+    }   
 
+    msgEditHandler(msgId){}
+
+    msgDeleteHandler(msgId){}
+
+    
+
+    inputAreaInit(){}
     
 
 
