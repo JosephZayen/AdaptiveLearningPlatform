@@ -76,10 +76,16 @@ class Board {
                 for(let i = 0; i < chats.length; i++){
                     const chat = chats[i];
                     const chatId = chat["chat_id"];
-                    const chatJson = chat["chat_json"];
-                    this.data[chatId] = chatJson;
+                    const chatObject = {};
+                    const chatOrder = [];
+                    chatObject["chat-order"] = chatOrder;
+                    const chatList = chat["chat_json"];
+                    const chatDict = Object.fromEntries(chatList);
+                    chatObject["chat-dict"] = chatDict;
+                    this.data[chatId] = chatObject;
                 }
             } else {
+                //TODO 这里怎么加重试啊
                 console.error("RESPONSE STATUS ERROR");
                 this.data = {};
                 throw new Error("response status error");
@@ -121,35 +127,38 @@ class Board {
             const chatItem = ev.target.closest(".sidebar-item");
             if(chatItem){
                 const chatId = chatItem.dataset.chatId;
-                this.active = chatId;
-                highlightSidebarItem(this.activeChatId);
-                renderChat(this.activeChatId);
+                this.activeChatId = chatId;
+                highlightSidebarItem();
+                renderChat();
             }
         });
     }
 
-    highlightSidebarItem(chatId){
+    highlightSidebarItem(){
         this.sidebar.childNodes.forEach((n)=>{
-            n.classList.toggle("active", n.dataset.chatId === chatId);
+            n.classList.toggle("active", n.dataset.chatId === this.activeChatId);
         });
     }
 
-    renderChat(chatId){
+    renderChat(){
         //清空聊天框
         this.messagesArea.innerHTML = "";
         //获取聊天对象数据，然后渲染
-        const chat = this.data[chatId];
-        const msgs = chat["chat_json"];
+        const chatObject = this.data[this.activeChatId];
+        const msgs = chatObject["chat-dict"];
         /* JOB: 这里需要改渲染逻辑, messageFrame那种 */
+        const fragment = document.createDocumentFragment();
         msgs.forEach((msg)=>{
-            const p = document.createElement("p");
-            p.textContent = `${msg["role"]}:\n\n${msg["content"]}`;
-            this.messagesArea.appendChild(p);
+            const msgFrame = this.createMessageFrame()
+            msgFrame.textContent = msg["content"]; //msg["role"]这样的
+            fragment.appendChild(msgFrame);
         })
+        this.messagesArea.appendChild(fragment);
+        //TODO 这语法对吗
     }
 
     /*
-        TODO:
+        JOB:
             还差new chat， 修改聊天消息， 删除聊天消息， 
     */
 
@@ -162,11 +171,17 @@ class Board {
                 const target = ev.target.closest("#new-chat");
                 if(target){
                     const chatId = await this.fetchNewChatId();
-                    this.data[chatId] = JSON.strinify(this.SYSTEM_MESSAGE_OBJECT);
-                    this.active = chatId;
+                    const chatObject = {};
+                    const chatOrder = [0];
+                    chatObject["chat-order"] = chatOrder;
+                    const chatDict = {};
+                    chatDict[0] = JSON.strinify(this.SYSTEM_MESSAGE_OBJECT);
+                    chatObject["chat-dict"] = chatDict;
+                    this.data[chatId] = chatObject;
+                    this.activeChatId = chatId;
                     this.appendSidebarItem(chatId);
-                    this.highlightSidebarItem(chatId);
-                    this.renderChat(chatId);
+                    this.highlightSidebarItem();
+                    this.renderChat();
                 }
             });
             //初始化新消息框的监听器
@@ -174,8 +189,17 @@ class Board {
             newMessageFrameBtn.addEventListener("click", (ev)=>{
                 const btn = ev.target.closest("#new-message-frame");
                 if(btn){
-                    const newMessageFrame = this.createMessageFrame();
-                    this.messagesArea.appendChild(newMessageFrame);
+                    //这里只改内存状态
+                    const chat = this.data[this.activeChatId];
+                    const chatOrder = chat["chat-order"];
+                    const chatDict = chat["chat-dict"];
+                    const lastId = chatOrder.at(-1);
+                    const newMsgId = lastId === undefined ? 0 : lastId + 1;
+                    chatOrder.push(newMsgId);
+                    //TODO: 重构成静态方法，拆分成几个子类
+                    chatDict[newMsgId] = JSON.stringify(this.createEmptyUserMsg());
+                    //重新渲染
+                    this.renderChat();
                 }
             });
             //初始化模型参数选择器的监听器
@@ -190,9 +214,15 @@ class Board {
         });
     } 
 
+    createEmptyUserMsg(){
+        return {"role": "user", "content": ""};
+    }
+
 
     createMessageFrame(){
-        /*  读一下伪元素那块，看懂下面这句话：
+        
+        /*  TODO
+            读一下伪元素那块，看懂下面这句话：
             placeholder：contenteditable 没有原生 placeholder，用 :empty::before { content: attr(data-placeholder) }
         */
         const newMessageFrame = document.createElement("div");
@@ -258,20 +288,58 @@ class Board {
             //没错，result应该是个特殊的属性
             const target = ev.target;
             const msgFrame = target.closest(".message-frame");
-            const msgId = msgFrame.dataset.msgId;
-            if(target.closest(".message-edit-btn")){
-                msgEditHandler(msgId);
-            } else if(target.closest(".message-delete-btn")){
+            const msgId = parseInt(msgFrame.dataset.msgId);
+            const editNode = target.closest(".message-edit-btn");
+            const delNode = target.closest(".message-delete-btn");
+            if(editNode){
+                const editor = editNode?.querySelector("message-editor");
+                if(editNode.dataset.editing && editNode.dataset.editing === "true"){
+                    msgEditHandler(msgId);
+                    editNode.dataset.editing === "false";
+                    editor.setAttribute("contenteditable", "false");
+                } else if(editNode.dataset.editing && editNode.dataset.editing === "false"){
+                    editNode.dataset.editing === "true";
+                    editor.setAttribute("contenteditable", "true");
+                } else {
+                    editNode.dataset.editing === "false";
+                    editor.setAttribute("contenteditable", "false");
+                }
+            } else if(delNode){
                 msgDeleteHandler(msgId);
             }
         });
     }   
 
-    msgEditHandler(msgId){}
+    msgEditHandler(msgId){
+        //这用到了CSS属性选择器，看一下CSS权威指南第二章
+        this.getMsgEditor(msgId);
+        const activeChat = this.data[this.activeChatId];
+        const emptyUserMsg = this.createEmptyUserMessage();
+        emptyUserMsg["content"] = msgEditor?.textContent;
+        //这里我塞进去的是对象，初始化的时候，response.json()拿到的
+        activeChat["chat-dict"][msgId] = emptyUserMsg;
+        this.renderChat();
+    }
 
-    msgDeleteHandler(msgId){}
+    getMsgEditor(msgId){
+        return this.messagesArea.querySelector(`[data-msg-id]=${msgId}`)?.querySelector(".message-editor");
+    }
 
-    
+    msgDeleteHandler(msgId){
+        const activeChat = this.data[this.activeChatId];
+        delete activeChat["chat-dict"][msgId];
+        //undefined的行为是什么
+        const newOrder = activeChat["chat-order"]?.filter((x)=>{x != msgId});
+        activeChat["chat-order"] = newOrder ? newOrder : activeChat["chat-order"];
+        
+    }
+
+    /**
+     * 我可以用数组来反映消息的状态，也可以用对象，前者好处就是直接添加容易，缺点是删除复杂，因为删除了一个消息岂不是说其它的要重新赋值ID？序列变了，这样耦合程度太高。如果是集合，删除容易，添加麻烦，因为不知道最大的序列，所以还需要一个对象来保存
+     * 
+     * 
+     * AI的解决办法是直接用一个数组来存顺序，确实，因为每次我重新排其实就是在算这个列表，从小到大，那直接维护就好了，每次重新渲染时间复杂度只需要O(n)，如果是我之前那个即时算的办法就是O(nlog(n))
+     */
 
     inputAreaInit(){}
     
