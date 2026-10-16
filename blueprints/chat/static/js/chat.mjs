@@ -170,18 +170,7 @@ class Board {
             newChatBtn.addEventListener("click", async (ev)=>{
                 const target = ev.target.closest("#new-chat");
                 if(target){
-                    const chatId = await this.fetchNewChatId();
-                    const chatObject = {};
-                    const chatOrder = [0];
-                    chatObject["chat-order"] = chatOrder;
-                    const chatDict = {};
-                    chatDict[0] = JSON.strinify(this.SYSTEM_MESSAGE_OBJECT);
-                    chatObject["chat-dict"] = chatDict;
-                    this.data[chatId] = chatObject;
-                    this.activeChatId = chatId;
-                    this.appendSidebarItem(chatId);
-                    this.highlightSidebarItem();
-                    this.renderChat();
+                    this.addChat();
                 }
             });
             //初始化新消息框的监听器
@@ -189,17 +178,7 @@ class Board {
             newMessageFrameBtn.addEventListener("click", (ev)=>{
                 const btn = ev.target.closest("#new-message-frame");
                 if(btn){
-                    //这里只改内存状态
-                    const chat = this.data[this.activeChatId];
-                    const chatOrder = chat["chat-order"];
-                    const chatDict = chat["chat-dict"];
-                    const lastId = chatOrder.at(-1);
-                    const newMsgId = lastId === undefined ? 0 : lastId + 1;
-                    chatOrder.push(newMsgId);
-                    //TODO: 重构成静态方法，拆分成几个子类
-                    chatDict[newMsgId] = JSON.stringify(this.createEmptyUserMsg());
-                    //重新渲染
-                    this.renderChat();
+                    this.addMsgFrame();
                 }
             });
             //初始化模型参数选择器的监听器
@@ -213,6 +192,35 @@ class Board {
             resolve();
         });
     } 
+
+    async addChat(){
+        const chatId = await this.fetchNewChatId();
+        const chatObject = {};
+        const chatOrder = [0];
+        chatObject["chat-order"] = chatOrder;
+        const chatDict = {};
+        chatDict[0] = JSON.strinify(this.SYSTEM_MESSAGE_OBJECT);
+        chatObject["chat-dict"] = chatDict;
+        this.data[chatId] = chatObject;
+        this.activeChatId = chatId;
+        this.appendSidebarItem(chatId);
+        this.highlightSidebarItem();
+        this.renderChat();
+    }
+
+    addMsgFrame(){
+        //这里只改内存状态
+        const chat = this.data[this.activeChatId];
+        const chatOrder = chat["chat-order"];
+        const chatDict = chat["chat-dict"];
+        const lastId = chatOrder.at(-1);
+        const newMsgId = lastId === undefined ? 0 : lastId + 1;
+        chatOrder.push(newMsgId);
+        //TODO: 重构成静态方法，拆分成几个子类
+        chatDict[newMsgId] = JSON.stringify(this.createEmptyUserMsg());
+        //重新渲染
+        this.renderChat();
+    }
 
     createEmptyUserMsg(){
         return {"role": "user", "content": ""};
@@ -312,7 +320,7 @@ class Board {
 
     msgEditHandler(msgId){
         //这用到了CSS属性选择器，看一下CSS权威指南第二章
-        this.getMsgEditor(msgId);
+        const msgEditor = this.getMsgEditor(msgId);
         const activeChat = this.data[this.activeChatId];
         const emptyUserMsg = this.createEmptyUserMessage();
         emptyUserMsg["content"] = msgEditor?.textContent;
@@ -331,7 +339,7 @@ class Board {
         //undefined的行为是什么
         const newOrder = activeChat["chat-order"]?.filter((x)=>{x != msgId});
         activeChat["chat-order"] = newOrder ? newOrder : activeChat["chat-order"];
-        
+        this.renderChat();
     }
 
     /**
@@ -341,18 +349,48 @@ class Board {
      * AI的解决办法是直接用一个数组来存顺序，确实，因为每次我重新排其实就是在算这个列表，从小到大，那直接维护就好了，每次重新渲染时间复杂度只需要O(n)，如果是我之前那个即时算的办法就是O(nlog(n))
      */
 
-    inputAreaInit(){}
+    async inputAreaInit(){
+        const inputText = this.textArea.textContent;
+        if(inputText){
+            const activeChat = this.data[this.activeChatId];
+            const lastId = activeChat["chat-order"]?.at(-1);
+            const newChatId = lastId === undefined ? lastId + 1 : 0;
+            activeChat["chat-order"].push(newChatId);
+            const newUserMessage = this.createEmptyUserMessage();
+            newUserMessage["content"] = inputText.trim();
+            activeChat["chat-dict"][newChatId] = newUserMessage;
+            this.renderChat();
+        }
+    }
+
+
+    async getRenderResponse(){
+        const responseText = this.askai();
+        const activeChat = this.data[this.activeChatId];
+        const lastId = activeChat["chat-order"]?.at(-1);
+        const newChatId = lastId === undefined ? lastId + 1 : 0;
+        activeChat["chat-order"].push(newChatId);
+        const newUserMessage = this.createEmptyUserMessage();
+        newUserMessage["content"] = responseText.trim();
+        activeChat["chat-dict"][newChatId] = newUserMessage;
+        this.renderChat();
+    }
     
 
-
-    
-
-    askai(messages) {
+    askai() {
+        const messages = [];
+        const activeChat = this.data[this.activeChatId];
+        const chatOrder = activeChat["chat-order"];
+        const chatDict = activeChat["chat-dict"];
+        chatOrder.forEach((chatId)=>{
+            messages.push(chatDict[chatId]);
+        });
+        const messagesJson = JSON.stringify(messages);
         const reasoningEffort = this.reasoningSelectTag.getAttribute("name");
         return fetch(`FETCH_PATH`, {
             method: "POST",
             body: JSON.stringify({
-                "messages": messages,
+                "messages": messagesJson,
                 "reasoning": reasoningEffort
             })
         })
