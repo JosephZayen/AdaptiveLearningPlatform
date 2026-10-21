@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, mapped_column, relationship, Mapped, Session
-from typing import List
+from typing import List, Optional
 
 # Base model and user class
 
@@ -31,7 +31,7 @@ class Event(Base):
     timestamp: Mapped[int]
     description: Mapped[str]
     local_date: Mapped[str]
-    user: Mapped["User"] = relationship(
+    user: Mapped[Optional["User"]] = relationship(
         back_populates="events"
     )
     
@@ -63,11 +63,11 @@ event.user = usr1;
 
 class ChatSession(Base):
     __tablename__ = "chat-session"
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[Optional[int]] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    user: Mapped["User"] = relationship(back_populates="chat_sessions")
-    local_date: Mapped[str]
-    json_data: Mapped[str]
+    user: Mapped[Optional["User"]] = relationship(back_populates="chat_sessions")
+    local_date: Mapped[Optional[str]]
+    json_data: Mapped[Optional[str]]
 
 
 

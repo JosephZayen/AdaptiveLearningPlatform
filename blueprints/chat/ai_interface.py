@@ -19,4 +19,5 @@ def get_response(messages, reasoning):
         print(repr(e), type(e).__name__)
         return f"message failed, {repr(e)}"
     else:
+        print("successful")
         return response.choices[0].message.content

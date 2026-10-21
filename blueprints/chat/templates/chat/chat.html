@@ -12,13 +12,20 @@ chat
     display: flex;
   }
 
-  #chat-main #chat-sidebar {
+  #chat-sidebar {
     width: 20%;
     background-color: #f0f0f0;
     margin: 20px;
   }
 
-  #chat-main #chat-messages {
+  #chat-sidebar #sidebar-chats *{
+    display: block;
+    width: 100%;
+    height: 30px;
+    background-color: #f0f0f0;
+  }
+
+  #chat-messages {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -27,6 +34,17 @@ chat
 
   #chat-messages #messages {
     flex: 1;
+    flex-direction: column;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  #chat-messages #messages * {
+    width: 400px;
+    height: 40px;
+    background-color: #f0f0f0;
+    flex: 0 0 auto;
   }
 
   #chat-messages #inputarea {
@@ -40,6 +58,7 @@ chat
     min-width: max-content;
     align-self: flex-start;
   }
+
 </style>
 {% endblock %}
 
@@ -52,10 +71,13 @@ chat
       <label for="reasoning-selector">select reasoning: </label>
       <select name="reasoning-selector" id="reasoning-selector">
         <option value="enabled">enabled</option>
-        <option value="disabled">disabled</option>
+        <option value="disabled" selected>disabled</option>
       </select>
       <button type="button" id="new-message-frame">new message frame</button>
     </form>
+
+    <div id="sidebar-chats">
+    </div>
   </div>
   <div id="chat-messages">
     <div id="messages">
@@ -70,5 +92,5 @@ chat
 {% endblock %}
 
 {% block js %}
-<script src="{{url_for('chat_bp.static', filename='chat.mjs')}}" type="module"></script>
+<script src="{{url_for('chat_bp.static', filename='js/chat.mjs')}}" type="module"></script>
 {% endblock %}
