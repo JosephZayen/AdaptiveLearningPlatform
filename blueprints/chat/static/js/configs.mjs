@@ -4,9 +4,10 @@ class APIConfigs{
     constructor(){
         //给API new-chat/read-sessions的日期
         const today = new Date();
-        const localDate = this.dateToStr(today);
+        const localDate = APIConfigs.dateToStr(today);
         this.todayStr = localDate;
 
+        //API路径
         const API_BASE_PATH = "/chat/api/";
         this.API_BASE_PATH = API_BASE_PATH;
 
@@ -14,10 +15,20 @@ class APIConfigs{
         this.READSESSIONS_PATH = API_BASE_PATH + "read-sessions";
         this.ASKAI_PATH = API_BASE_PATH + "askai";
         this.NEW_CHAT_PATH = API_BASE_PATH + "new-chat";
+
+        //API配置
+        this.modelReasoning = "disabled";
     }
 
-    dateToStr(today){
+    static dateToStr(today){
         return `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    }
+
+    setModelReasoning(r){
+        const valid = ["disabled", "enabled"];
+        if(typeof r === "string" && valid.includes(r)){
+            this.modelReasoning = r;
+        }
     }
 }
 

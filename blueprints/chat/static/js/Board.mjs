@@ -72,20 +72,7 @@ export class Board {
             resolve();
         })
     }
-    
-    requestChats(params){
-        return fetch(`/chat/api/read-sessions?${params}`, {
-            method: "GET"
-        })
-        .then(
-            (response)=>{
-                if(!response.ok){
-                    throw new Error(`HTTP Error ${response.status}`);
-                }
-                return response.json();
-            }
-        )
-    }
+
 }
 
 //如何数字转字符串

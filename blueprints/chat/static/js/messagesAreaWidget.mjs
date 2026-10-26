@@ -2,18 +2,19 @@
 
 
 
-export class messagesArea extends Board{
+export class MessagesArea{
     constructor(options){
         this.messagesArea = options.messagesArea;
-        this.getActiveChatId = options.getActiveChatId;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
-        this.getChat = options.getChat;
-        this.getMsgDict = options.getMsgDict;
-        this.getMsgOrder = options.getMsgOrder;
-        this.addEmptyMsg = options.addEmptyMsg;
+        const store = options.store;
+        this.getActiveChatId = store.getActiveChatId;
+        this.getChat = store.getChat;
+        this.getMsgDict = store.getMsgDict;
+        this.getMsgOrder = store.getMsgOrder;
+        this.addMsg = store.addMsg;
     }
 
-    //创建新的消息框
+    //创建新的消息框，只是DOM，不涉及内存
     createMessageFrame(content){
 
         /*  TODO
@@ -99,9 +100,9 @@ export class messagesArea extends Board{
         this.renderChat();
     }
     
-    //添加新消息， 这里只改内存状态
-    addEmptyMsg(){
-        this.addEmptyMsg(this.getActiveChatId());
+    //给活跃聊天添加新消息， 这里只改内存状态
+    addMsgFrame(role, content){
+        this.addMsg(this.getActiveChatId(), role, content);
         this.renderChat();
     }
 

@@ -1,9 +1,28 @@
 
+ 
+//TODO: 如果说两个类相互依赖，初始化的时候需要引用彼此的方法，要怎么办
+
 class ControlPlane{
     constructor(options){
         this.newChatBtn = options.newChatBtn;
         this.newMessageFrameBtn = options.newMessageFrameBtn;
         this.reasoningSelectTag = options.reasoningSelectTag;
+        //init configs
+        const APIConfigs = options.API;
+        this.setModelReasoning = APIConfigs.setModelReasoning;
+        //init messages widget
+        const messagesArea = options.messagesArea;
+        this.addMsgFrame = messagesArea.addMsgFrame;
+        //init sidebar widget
+        const sidebar = options.sidebar;
+        this.highlightSidebarItem = sidebar.highlightSidebarItem;
+        this.appendSidebarItem = sidebar.appendSidebarItem;
+        //init store object
+        const store = options.store;
+        this.addEmptyChat = store.addEmptyChat;
+        //init network object
+        const network = options.network;
+        this.fetchNewChatId = network.fetchNewChatId;
         this.controlPlaneInit();
     }
 
@@ -23,7 +42,7 @@ class ControlPlane{
             newMessageFrameBtn.addEventListener("click", (ev)=>{
                 const btn = ev.target.closest("#new-message-frame");
                 if(btn){
-                    this.addMsgFrame();
+                    this.addMsgFrame("user", "");
                 }
             });
             //初始化模型参数选择器的监听器
@@ -31,7 +50,7 @@ class ControlPlane{
             reasoningSelector.addEventListener("change", (ev)=>{
                 const rs = ev.target.closest("#reasoning-selector");
                 if(rs){
-                    this.modelReasoning = rs.getAttribute("value") | "disabled";
+                    this.setModelReasoning(rs.getAttribute("value") || "disabled");
                 }
             })
             resolve();
@@ -40,7 +59,7 @@ class ControlPlane{
 
     async addChat(){
         const chatId = await this.fetchNewChatId();
-        this.addEmptyChat(this.SYSTEM_MESSAGE_OBJECT);
+        this.addEmptyChat(chatId, this.SYSTEM_MESSAGE_OBJECT);
         this.activeChatId = chatId;
         this.appendSidebarItem(chatId);
         this.highlightSidebarItem();

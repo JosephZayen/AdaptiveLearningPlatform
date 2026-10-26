@@ -1,7 +1,7 @@
 class Store {
     constructor(){
         this.data = {}
-
+        
         const annotation = `
             data : {
                 chatId: {
@@ -18,7 +18,7 @@ class Store {
     //------------------------------------------------------------------
 
     //数据层：给活跃chat的末尾添加一个空的message
-    addEmptyMsg(chatId, inputText){ 
+    addMsg(chatId, role, inputText){ 
         const msgOrder = this.getMsgOrder(chatId);
         const msgDict = this.getMsgDict(chatId);
         //推入新消息顺序
@@ -26,7 +26,7 @@ class Store {
         const newMsgId = lastId === undefined ? 0 : lastId + 1;
         msgOrder.push(newMsgId);
         //推入新消息数据 
-        msgDict[newMsgId] = this.createEmptyUserMessage(inputText ? inputText.trim() : "");
+        msgDict[newMsgId] = this.createRoleMessage(role, inputText ? inputText.trim() : "");
     }
 
     editMsg(chatId, msgId, newText){
@@ -73,16 +73,16 @@ class Store {
 
     //------------------------------------------------------------------
 
-    createEmptyUserMessage(content){
-        return createEmptyRoleMessage("user", content ?? "");
+    createUserMessage(content){
+        return createRoleMessage("user", content ?? "");
     }
 
-    createEmptySystemMessage(content){
-        return createEmptyRoleMessage("system", content ?? "");
+    createSystemMessage(content){
+        return createRoleMessage("system", content ?? "");
     }
 
-    createEmptyRoleMessage(role, content){
-        const valid = ["user", "system"];
+    createRoleMessage(role, content){
+        const valid = ["user", "system", "assistant"];
         if(valid.includes(role)){
             return {"role": role, "content": content ? String(content) : ""};
         } else {

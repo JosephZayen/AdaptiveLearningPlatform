@@ -3,8 +3,9 @@ class InputArea {
     constructor (options){
         this.inputBtn = options.inputBtn;
         this.textArea = options.textArea;
-        this.addActiveChatMsg = options.addActiveChatMsg;
-        this.renderChat = options.renderChat;
+        const messagesArea = options.messagesArea;
+        this.addMsgFrame = messagesArea.addMsgFrame;
+        this.renderChat = messagesArea.renderChat;
     }
 
     /**
@@ -27,16 +28,19 @@ class InputArea {
     inputHandler(){
         const inputText = this.textArea.value;
         if(inputText){
-            this.addActiveChatMsg(inputText);
+            this.addMsgFrame("user", inputText);
             this.renderChat();
             this.getRenderResponse();
+        } else {
+            this.addMsgFrame("user", "");
+            this.renderChat();
         }
     }
 
     //拿回AI回复数据，然后加数据（内存）
     async getRenderResponse(){
         const responseText = await this.askai();
-        this.addActiveChatMsg(responseText);
+        this.addMsgFrame("assistant", responseText);
         this.renderChat();
     }
 }

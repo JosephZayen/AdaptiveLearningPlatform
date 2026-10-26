@@ -1,8 +1,14 @@
 export class Network{
     constructor (options){
-        this.NEW_CHAT_PATH = options.NEW_CHAT_PATH;
-        this.SUCCESS = options.SUCCESS;
-        this.getOrderAndDict = options.getOrderAndDict;
+        const API = options.API;
+        this.NEW_CHAT_PATH = API.NEW_CHAT_PATH;
+        this.ASK_AI_PATH = API.ASKAI_PATH;
+
+        const macroConfigs = options.macroConfigs;
+        this.SUCCESS = macroConfigs.SUCCESS;
+
+        const store = options.store;
+        this.getOrderAndDict = store.getOrderAndDict;
     }
     
     fetchNewChatId(){
@@ -31,7 +37,7 @@ export class Network{
     askai(chatId, reasoningEffort) {
         const messages = [];
         const [msgOrder, msgDict] = this.getOrderAndDict(chatId);
-        chatOrder.forEach((msgId)=>{
+        msgOrder.forEach((msgId)=>{
             messages.push(msgDict[msgId]);
         });
         console.log(messages);
@@ -62,5 +68,24 @@ export class Network{
             console.error("askai error: ");
             console.error(reason);
         });
+    }
+
+
+    requestChats(params){
+        return fetch(`/chat/api/read-sessions?${params}`, {
+            method: "GET"
+        })
+        .then(
+            (response)=>{
+                if(!response.ok){
+                    throw new Error(`HTTP Error ${response.status}`);
+                }
+                return response.json();
+            }
+        )
+    }
+
+    parse_chats(chats){
+        
     }
 }
