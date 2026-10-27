@@ -7,6 +7,9 @@ class ControlPlane{
         this.newChatBtn = options.newChatBtn;
         this.newMessageFrameBtn = options.newMessageFrameBtn;
         this.reasoningSelectTag = options.reasoningSelectTag;
+    }
+
+    init(options){
         //init configs
         const APIConfigs = options.API;
         this.setModelReasoning = APIConfigs.setModelReasoning;

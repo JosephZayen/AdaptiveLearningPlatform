@@ -1,5 +1,9 @@
 export class Network{
-    constructor (options){
+    constructor (){
+        
+    }
+
+    init(options){
         const API = options.API;
         this.NEW_CHAT_PATH = API.NEW_CHAT_PATH;
         this.ASK_AI_PATH = API.ASKAI_PATH;
@@ -85,7 +89,6 @@ export class Network{
         )
     }
 
-    parse_chats(chats){
-        
-    }
+
+    updateChat(){}
 }

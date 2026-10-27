@@ -1,6 +1,10 @@
 class InputArea {
 
-    constructor (options){
+    constructor (){
+
+    }
+
+    init(options){
         this.inputBtn = options.inputBtn;
         this.textArea = options.textArea;
         const messagesArea = options.messagesArea;

@@ -6,13 +6,36 @@ export class MessagesArea{
     constructor(options){
         this.messagesArea = options.messagesArea;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
+    }
+
+    init(options){
         const store = options.store;
         this.getActiveChatId = store.getActiveChatId;
+        this.getData = store.getData;
+        this.setData = store.setData;
         this.getChat = store.getChat;
         this.getMsgDict = store.getMsgDict;
         this.getMsgOrder = store.getMsgOrder;
         this.addMsg = store.addMsg;
+        const sidebar = options.sidebar;
+        this.clearSidebar = sidebar.clearSidebar;
     }
+
+    //从data里面初始化
+    loadFromData(){
+        const data = this.getData();
+        this.clearMessagesArea();
+        this.clearSidebar();
+        //挂载data中的chats到边栏
+        for (const chatId of Object.keys(data).sort()){
+            this.appendSidebarItem(chatId);
+        }
+    }
+
+    clearMesssagesArea(){
+        this.messagesArea.innerHTML = "";
+    }
+
 
     //创建新的消息框，只是DOM，不涉及内存
     createMessageFrame(content){

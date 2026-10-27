@@ -2,12 +2,19 @@
 class Sidebar{    
     constructor(options){
         this.sidebar = options.sidebarNode;
+    }
+
+    init(options){
         const store = options.store;
         this.getActiveChatId = store.getActiveChatId;
         this.setActiveChatId = store.setActiveChatId;
         const messagesArea = options.messagesArea;
         this.renderChat = messagesArea.renderChat;
-    }  
+    }
+    
+    clearSidebar(){
+        this.sidebar.innerHTML = "";
+    }
 
     //插一个chatId的span标签到末尾
     appendSidebarItem(chatId){
@@ -17,7 +24,7 @@ class Sidebar{
         this.sidebar.appendChild(chatSpan);
     }
 
-        sidebarListenerInit(){
+    sidebarListenerInit(){
         this.sidebar.addEventListener("click", (ev)=>{
             const chatItem = ev.target.closest(".sidebar-item");
             if(chatItem){

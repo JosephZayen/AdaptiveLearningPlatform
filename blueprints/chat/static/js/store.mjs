@@ -1,7 +1,6 @@
 class Store {
     constructor(){
         this.data = {}
-        
         const annotation = `
             data : {
                 chatId: {
@@ -11,11 +10,22 @@ class Store {
                 
             }
         `
-
-
     }
 
     //------------------------------------------------------------------
+
+    init(options){}
+
+
+    setData(newData){
+        this.data = newData;
+    }
+
+    getData(){
+        return this.data;
+    }
+
+
 
     //数据层：给活跃chat的末尾添加一个空的message
     addMsg(chatId, role, inputText){ 

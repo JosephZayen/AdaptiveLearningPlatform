@@ -5,26 +5,20 @@
 //webpack打包
 
 export class Board {
-    constructor (sidebar, messagesArea, inputBtn, textArea, controlPlane, systemPromptContent) {
-        //控件
-        this.sidebar = sidebar;
-        this.messagesArea = messagesArea;
-        this.inputBtn = inputBtn;
-        this.textArea = textArea;
-        this.controlPlane = controlPlane; 
-        this.newChatBtn = controlPlane.querySelector("#new-chat");
-        this.reasoningSelectTag = controlPlane.querySelector("#reasoning-selector");
-        this.newMessageFrameBtn = controlPlane.querySelector("#new-message-frame");
-        /**
-         * controlArea
-         *  #new-chat
-         *  #reasoning-selector
-         *  #new-message-frame
-         * 然后把几个子控件挂载到对象上
-         */
+    constructor () {
 
-        //整个前端的本质是一个chatId与数据的键值对，反映它的状态，方便数据的提取
-        this.data = {};
+    }
+
+    init (options) {
+        //APIConfigs, store, network, mappers, messagesArea, sidebarWidget, controlPlaneWidget, inputWidget
+        const store = options.store;
+        this.setData = store.setData;
+        const network = options.network;
+        this.requestChats = network.requestChats;
+        const mappers = options.mappers;
+        this.parseChats = mappers.parseChats;
+        const messagesArea = options.messagesArea;
+        this.loadFromData = messagesArea.loadFromData;
     }
 
     /*
@@ -34,45 +28,31 @@ export class Board {
         拉取数据只进行一次，之后只需更新即可
     */
 
-    async init () {
-        return new Promise(async (resolve)=>{
+    async loadFromBackEnd () {
+        return new Promise((resolve)=>{
             //拉取所有聊天数据，加载到this.data里面
             const params = new URLSearchParams();
             params.append("local_date", this.todayStr);
-            const responseObject = await this.requestChats(params);
-            if(responseObject.status === this.SUCCESS){
-                const chats = JSON.parse(responseObject.content);
-                console.log(chats);
-                console.log(typeof chats);
-                console.log(chats);
-                for(let i = 0; i < chats.length; i++){
-                    const chat = chats[i];
-                    const chatId = chat["chat_id"];
-                    const chatObject = {};
-                    const chatOrder = [];
-                    chatObject["chat-order"] = chatOrder;
-                    const chatList = chat["chat_json"];
-                    const chatDict = Object.fromEntries(chatList);
-                    chatObject["chat-dict"] = chatDict;
-                    this.data[chatId] = chatObject;
+            const response = this.requestChats(params);
+            response.then((responseObject)=>{
+                if(responseObject.status === this.SUCCESS){
+                    const newData = this.parseChats(responseObject.content);
+                    this.setData(newData);
+                    //LOG ----------------------------------------------------------------------------------------
+                    console.log(chats);
+                    console.log(typeof chats);
+                    console.log(chats);
+                } else {
+                    //TODO 这里怎么加重试啊
+                    this.setData({});
+                    console.error("RESPONSE STATUS ERROR");
+                    throw new Error("response status error");
                 }
-            } else {
-                //TODO 这里怎么加重试啊
-                console.error("RESPONSE STATUS ERROR");
-                this.data = {};
-                throw new Error("response status error");
-            }
-            //清空边栏和消息的内容
-            this.messagesArea.innerHTML = "";
-            this.sidebar.innerHTML = "";
-            //挂载this.data中的chats到边栏
-            for (const chatId of Object.keys(this.data)){
-                this.appendSidebarItem(chatId);
-            }
-            resolve();
+                this.loadFromData();
+                resolve();
+            })
         })
     }
-
 }
 
 //如何数字转字符串

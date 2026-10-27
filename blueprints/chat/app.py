@@ -26,7 +26,7 @@ def update():
             uid = session["uid"]
             data = request.get_json()
             chat_id = data["chat_id"]
-            chat_json = data["chat_json"]
+            chat_json = data["msg_dict"]
             stmt = select(ChatSession).where(ChatSession.id == chat_id).where(ChatSession.user_id == uid)
             chat_session = db_session.scalars(stmt).first()
             if(chat_session):
@@ -70,7 +70,7 @@ def read_sessions():
                 sessions_data.append(
                     {
                         "chat_id": s.id,
-                        "chat_json": s.json_data,
+                        "msg_dict": s.json_data,
                         "local_date": s.local_date
                     }
                 )
