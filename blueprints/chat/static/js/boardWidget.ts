@@ -4,7 +4,7 @@
 //我想读取配置文件，符合DRY原则，减小代码复杂度，但是这个JS运行在浏览器环境里面，咋办
 //webpack打包
 
-export class Board {
+export class BoardWidget {
     constructor () {
 
     }
@@ -12,13 +12,13 @@ export class Board {
     init (options) {
         //APIConfigs, store, network, mappers, messagesArea, sidebarWidget, controlPlaneWidget, inputWidget
         const store = options.store;
-        this.setData = store.setData;
+        this.setData = storeWidget.setData;
         const network = options.network;
-        this.requestChats = network.requestChats;
+        this.requestChats = networkWidget.requestChats;
         const mappers = options.mappers;
-        this.parseChats = mappers.parseChats;
+        this.parseChats = mappersWidget.parseChats;
         const messagesArea = options.messagesArea;
-        this.loadFromData = messagesArea.loadFromData;
+        this.loadFromData = messagesAreaWidget.loadFromData;
     }
 
     /*

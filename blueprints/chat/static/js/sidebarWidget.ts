@@ -1,14 +1,21 @@
+import type {SidebarInterface} from "./interface/sidebarInterface.ts";
+
 //TODO: 搞清楚JS是不是必须写初始化，然后搞懂models里面的继承机制干了什么，为什么没写init也可以，还有super(js)
-class Sidebar{    
+export class SidebarWidget implements SidebarInterface{  
+    getActiveChatId!: SidebarInterface["getActiveChatId"];
+    setActiveChatId!: SidebarInterface["setActiveChatId"];
+    renderChat!: SidebarInterface["renderChat"];
+    sidebar!: SidebarInterface["sidebar"];
+    
     constructor(options){
         this.sidebar = options.sidebarNode;
     }
 
     init(options){
-        const store = options.store;
+        const store = options.storeWidget;
         this.getActiveChatId = store.getActiveChatId;
         this.setActiveChatId = store.setActiveChatId;
-        const messagesArea = options.messagesArea;
+        const messagesArea = options.messagesAreaWidget;
         this.renderChat = messagesArea.renderChat;
     }
     

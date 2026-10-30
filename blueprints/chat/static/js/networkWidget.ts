@@ -1,4 +1,10 @@
-export class Network{
+import type {NetworkInterface} from "./interface/networkInterface.ts";
+ 
+export class NetworkWidget implements NetworkInterface{
+    NEW_CHAT_PATH;
+    ASK_AI_PATH;
+    SUCCESS;
+    getOrderAndDict;
     constructor (){
         
     }
@@ -49,7 +55,7 @@ export class Network{
                 "messages": messages,
                 "reasoning": reasoningEffort
             }));
-        return fetch(this.ASKAI_PATH, {
+        return fetch(this.ASK_AI_PATH, {
             method: "POST",
             body: JSON.stringify({
                 "messages": messages,

@@ -35,6 +35,7 @@ class APIConfigs{
 class DataConfigs{
     constructor(){
         //提示词系统对象，初始化新聊天的时候挂载上去
+        const systemPromptContent = "你是一个AI";
         this.SYSTEM_MESSAGE_OBJECT = {"role": "system", "content": systemPromptContent};
     }
 }
@@ -49,6 +50,6 @@ class MacroConfigs {
     }
 }
 
-const API = new APIConfigs();
-const DATA_CONFIGS = new DataConfigs();
-const Macro = new MacroConfigs();
+export const API = new APIConfigs();
+export const dataConfigs = new DataConfigs();
+export const macro = new MacroConfigs();

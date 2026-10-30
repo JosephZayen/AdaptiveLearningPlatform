@@ -1,4 +1,10 @@
-class Store {
+import type {storeInterface, data} from "./interface/storeInterface.ts"
+ 
+
+export class StoreWidget implements storeInterface {
+    data!: storeInterface["data"];
+    activeChatId!: storeInterface["activeChatId"];
+
     constructor(){
         this.data = {}
         const annotation = `
@@ -11,13 +17,12 @@ class Store {
             }
         `
     }
-
+ 
     //------------------------------------------------------------------
 
-    init(options){}
+    init(options: object){}
 
-
-    setData(newData){
+    setData(newData: storeInterface["data"]){
         this.data = newData;
     }
 
@@ -25,10 +30,8 @@ class Store {
         return this.data;
     }
 
-
-
     //数据层：给活跃chat的末尾添加一个空的message
-    addMsg(chatId, role, inputText){ 
+    addMsg(chatId: number, role: string, inputText: string){ 
         const msgOrder = this.getMsgOrder(chatId);
         const msgDict = this.getMsgDict(chatId);
         //推入新消息顺序
@@ -39,13 +42,13 @@ class Store {
         msgDict[newMsgId] = this.createRoleMessage(role, inputText ? inputText.trim() : "");
     }
 
-    editMsg(chatId, msgId, newText){
+    editMsg(chatId: number, msgId: number, newText: string){
         const msgDict = this.getMsgDict(chatId);
-        msgDict[msgId] = this.createEmptyUserMessage(newText);
+        msgDict[msgId] = this.createUserMessage(newText);
     }
 
     //数据层：添加一个新的带有systemMessage对象（{role: ... content ...}）的chat
-    addEmptyChat(chatId, systemMessage){
+    addEmptyChat(chatId: number, systemMessage: object){
         const msgOrder = [0];
         const msgDict = {0 : systemMessage};
         this.data[chatId] = {"msg-order": msgOrder, "msg-dict": msgDict};
@@ -53,27 +56,27 @@ class Store {
 
     //------------------------------------------------------------------
 
-    getOrderAndDict(chatId){
+    getOrderAndDict(chatId: number){
         return [this.getMsgOrder(chatId), this.getMsgDict(chatId)];
     }
 
-    getChat(chatId){
-        return this.data[chatId];
+    getChat(chatId: number) {
+        return this.data[chatId] as object;
     }
 
-    getMsgOrder(chatId){
-        const chat = this.getChat(chatId);
+    getMsgOrder(chatId: number){
+        const chat = this.getChat(chatId) as object;
         return chat["msg-order"];
     }
 
-    getMsgDict(chatId){
-        const chat = this.getChat(chatId);
+    getMsgDict(chatId: number){
+        const chat = this.getChat(chatId) as object;
         return chat["msg-dict"];
     }
 
     //------------------------------------------------------------------
 
-    setActiveChatId(chatId){
+    setActiveChatId(chatId: number){
         this.activeChatId = chatId;
     }
 
@@ -83,15 +86,15 @@ class Store {
 
     //------------------------------------------------------------------
 
-    createUserMessage(content){
-        return createRoleMessage("user", content ?? "");
+    createUserMessage(content: string){
+        return this.createRoleMessage("user", content ?? "");
     }
 
-    createSystemMessage(content){
-        return createRoleMessage("system", content ?? "");
+    createSystemMessage(content: string){
+        return this.createRoleMessage("system", content ?? "");
     }
 
-    createRoleMessage(role, content){
+    createRoleMessage(role: string, content: string){
         const valid = ["user", "system", "assistant"];
         if(valid.includes(role)){
             return {"role": role, "content": content ? String(content) : ""};

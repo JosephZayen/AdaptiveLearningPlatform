@@ -2,14 +2,14 @@
 
 
 
-export class MessagesArea{
+export class MessagesAreaWidget{
     constructor(options){
-        this.messagesArea = options.messagesArea;
+        this.messagesArea = options.messagesAreaNode;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
     }
 
     init(options){
-        const store = options.store;
+        const store = options.storeWidget;
         this.getActiveChatId = store.getActiveChatId;
         this.getData = store.getData;
         this.setData = store.setData;
@@ -17,7 +17,7 @@ export class MessagesArea{
         this.getMsgDict = store.getMsgDict;
         this.getMsgOrder = store.getMsgOrder;
         this.addMsg = store.addMsg;
-        const sidebar = options.sidebar;
+        const sidebar = options.sidebarWidget;
         this.clearSidebar = sidebar.clearSidebar;
     }
 

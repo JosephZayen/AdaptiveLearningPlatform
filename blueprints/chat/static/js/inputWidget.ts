@@ -1,13 +1,12 @@
-class InputArea {
+export class InputAreaWidget {
 
-    constructor (){
-
+    constructor (options){
+        this.inputBtn = options.inputBtnNode;
+        this.textArea = options.textAreaNode;
     }
 
     init(options){
-        this.inputBtn = options.inputBtn;
-        this.textArea = options.textArea;
-        const messagesArea = options.messagesArea;
+        const messagesArea = options.messagesAreaWidget;
         this.addMsgFrame = messagesArea.addMsgFrame;
         this.renderChat = messagesArea.renderChat;
     }

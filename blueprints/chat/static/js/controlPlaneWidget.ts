@@ -1,9 +1,26 @@
-
+interface ConstructorOptions {
+    newChatBtn: HTMLElement;
+    newMessageFrameBtn: HTMLElement;
+    reasoningSelectTag: HTMLElement;
+};
  
 //TODO: 如果说两个类相互依赖，初始化的时候需要引用彼此的方法，要怎么办
 
-class ControlPlane{
-    constructor(options){
+export class ControlPlaneWidget{
+    newChatBtn: HTMLElement;
+    newMessageFrameBtn: HTMLElement;
+    reasoningSelectTag: HTMLElement;
+    setModelReasoning: Function;
+    addMsgFrame: Function;
+    highlightSidebarItem: Function;
+    appendSidebarItem: Function;
+    addEmptyChat: Function;
+    fetchNewChatId: Function;
+    renderChat: Function;
+    activeChatId: Number;
+
+
+    constructor(options: ConstructorOptions){
         this.newChatBtn = options.newChatBtn;
         this.newMessageFrameBtn = options.newMessageFrameBtn;
         this.reasoningSelectTag = options.reasoningSelectTag;
