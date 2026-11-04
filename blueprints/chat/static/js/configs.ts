@@ -1,6 +1,13 @@
+import type {APIConfigsInterface, DataConfigsInterface, MacroConfigsInterface} from "./interface/configsInterface.ts";
 
-
-class APIConfigs{
+class APIConfigs implements APIConfigsInterface{
+    todayStr: any;
+    API_BASE_PATH: any;
+    UPDATE_PATH: any;
+    READSESSIONS_PATH: any;
+    ASKAI_PATH: any;
+    NEW_CHAT_PATH: any;
+    modelReasoning: any;
     constructor(){
         //给API new-chat/read-sessions的日期
         const today = new Date();
@@ -32,7 +39,8 @@ class APIConfigs{
     }
 }
 
-class DataConfigs{
+class DataConfigs implements DataConfigsInterface{
+    SYSTEM_MESSAGE_OBJECT: any;
     constructor(){
         //提示词系统对象，初始化新聊天的时候挂载上去
         const systemPromptContent = "你是一个AI";
@@ -40,7 +48,10 @@ class DataConfigs{
     }
 }
 
-class MacroConfigs {
+class MacroConfigs implements MacroConfigsInterface{
+    FAILURE: any;
+    SUCCESS: any;
+    modelReasoning: any;
     constructor(){
         //状态码
         this.FAILURE = 1

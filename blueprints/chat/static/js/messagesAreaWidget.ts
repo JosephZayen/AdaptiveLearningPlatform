@@ -1,8 +1,24 @@
 //TODO： 这里如果循环引用会怎么样
 
+import type {MessagesAreaInterface} from "./interface/messagesInterface.ts";
 
+export class MessagesAreaWidget implements MessagesAreaInterface{
 
-export class MessagesAreaWidget{
+    //
+    messagesArea;
+
+    //依赖注入
+    getActiveChatId;
+    getData;
+    setData;
+    getChat;
+    getMsgDict;
+    getMsgOrder;
+    addMsg;
+    clearSidebar;
+    appendSidebarItem;
+    editMsg;
+
     constructor(options){
         this.messagesArea = options.messagesAreaNode;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
@@ -16,9 +32,11 @@ export class MessagesAreaWidget{
         this.getChat = store.getChat;
         this.getMsgDict = store.getMsgDict;
         this.getMsgOrder = store.getMsgOrder;
+        this.editMsg = store.editMsg;
         this.addMsg = store.addMsg;
         const sidebar = options.sidebarWidget;
         this.clearSidebar = sidebar.clearSidebar;
+        this.appendSidebarItem = sidebar.appendSidebarItem;
     }
 
     //从data里面初始化
@@ -32,7 +50,7 @@ export class MessagesAreaWidget{
         }
     }
 
-    clearMesssagesArea(){
+    clearMessagesArea(){
         this.messagesArea.innerHTML = "";
     }
 
@@ -85,7 +103,7 @@ export class MessagesAreaWidget{
                 if(editNode){
                     const editor = editNode?.querySelector("message-editor");
                     if(editNode.dataset.editing && editNode.dataset.editing === "true"){
-                        msgEditHandler(this.getActiveChatId(), msgId);
+                        this.msgEditHandler(this.getActiveChatId(), msgId);
                         editNode.dataset.editing === "false";
                         editor.setAttribute("contenteditable", "false");
                     } else {
@@ -93,7 +111,7 @@ export class MessagesAreaWidget{
                         editor.setAttribute("contenteditable", "true");
                     }
                 } else if(delNode){
-                    msgDeleteHandler(this.getActiveChatId(), msgId);
+                    this.msgDeleteHandler(this.getActiveChatId(), msgId);
                 }
             }
         });

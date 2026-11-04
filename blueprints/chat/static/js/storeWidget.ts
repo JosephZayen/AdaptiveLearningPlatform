@@ -2,11 +2,12 @@ import type {storeInterface, data} from "./interface/storeInterface.ts"
  
 
 export class StoreWidget implements storeInterface {
-    data!: storeInterface["data"];
-    activeChatId!: storeInterface["activeChatId"];
+    data!: any;
+    activeChatId!: any;
 
     constructor(){
         this.data = {}
+        /* 已经废弃，找到了TS的类型声明替代
         const annotation = `
             data : {
                 chatId: {
@@ -16,17 +17,18 @@ export class StoreWidget implements storeInterface {
                 
             }
         `
+        */
     }
  
     //------------------------------------------------------------------
 
-    init(options: object){}
+    init(options: any){}
 
-    setData(newData: storeInterface["data"]){
+    setData(newData: object): void{
         this.data = newData;
     }
 
-    getData(){
+    getData(): {}{
         return this.data;
     }
 

@@ -1,5 +1,15 @@
+interface msgObject {
+    role: "system" | "assistant" | "user";
+    content: string;
+}
+
 export interface data { 
-    [index: number]: object;
+    [index: number]: {
+        "msg-order": number[];
+        "msg-dict": {
+            [index: number]: msgObject;
+        }
+    };
 }
 
 export interface msgOrder { 
@@ -8,8 +18,14 @@ export interface msgOrder {
 
 
 export interface storeInterface {
+    //注意这里只对给外部的接口进行约束，以进行校验，但是内部状态的定义反而会增加复杂度
+    //所以内部的状态约束注释掉
+
+    /*
     activeChatId: number;
     data: data;
+    */
+
     // methods
     init: (options: any) => void;
     setData: (newData: data) => void;

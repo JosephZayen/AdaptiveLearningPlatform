@@ -1,10 +1,18 @@
-
+import type {boardInterface} from "./interface/boardInterface.ts";
 
 
 //我想读取配置文件，符合DRY原则，减小代码复杂度，但是这个JS运行在浏览器环境里面，咋办
 //webpack打包
 
 export class BoardWidget {
+
+    todayStr: any;
+    setData: any;
+    requestChats: any;
+    parseChats: any;
+    loadFromData: any;
+    SUCCESS: any;
+
     constructor () {
 
     }
@@ -12,13 +20,13 @@ export class BoardWidget {
     init (options) {
         //APIConfigs, store, network, mappers, messagesArea, sidebarWidget, controlPlaneWidget, inputWidget
         const store = options.store;
-        this.setData = storeWidget.setData;
+        this.setData = store.setData;
         const network = options.network;
-        this.requestChats = networkWidget.requestChats;
+        this.requestChats = network.requestChats;
         const mappers = options.mappers;
-        this.parseChats = mappersWidget.parseChats;
+        this.parseChats = mappers.parseChats;
         const messagesArea = options.messagesArea;
-        this.loadFromData = messagesAreaWidget.loadFromData;
+        this.loadFromData = messagesArea.loadFromData;
     }
 
     /*
@@ -39,9 +47,11 @@ export class BoardWidget {
                     const newData = this.parseChats(responseObject.content);
                     this.setData(newData);
                     //LOG ----------------------------------------------------------------------------------------
-                    console.log(chats);
-                    console.log(typeof chats);
-                    console.log(chats);
+                    /*
+                    console.log(newData);
+                    console.log(typeof newData);
+                    console.log(newData);
+                    */
                 } else {
                     //TODO 这里怎么加重试啊
                     this.setData({});
@@ -49,7 +59,7 @@ export class BoardWidget {
                     throw new Error("response status error");
                 }
                 this.loadFromData();
-                resolve();
+                resolve(null);
             })
         })
     }

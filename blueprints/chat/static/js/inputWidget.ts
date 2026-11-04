@@ -1,4 +1,15 @@
+import type {InputAreaInterface} from "./interface/inputAreaInterface.ts";
+
 export class InputAreaWidget {
+
+    // ===== DOM 相关属性（最前面）=====
+    inputBtn: HTMLElement;
+    textArea: HTMLTextAreaElement;
+
+    // ===== 依赖注入属性（第二部分）=====
+    addMsgFrame!: (role: string, text: string) => void;
+    renderChat!: () => void;
+    askai;
 
     constructor (options){
         this.inputBtn = options.inputBtnNode;
@@ -9,6 +20,8 @@ export class InputAreaWidget {
         const messagesArea = options.messagesAreaWidget;
         this.addMsgFrame = messagesArea.addMsgFrame;
         this.renderChat = messagesArea.renderChat;
+        const network = options.network;
+        this.askai = network.askai;
     }
 
     /**
@@ -20,7 +33,8 @@ export class InputAreaWidget {
 
     async inputAreaInit(){
         this.inputBtn.addEventListener("click", (ev)=>{
-            if(ev.target.closest("#input-submit")){
+            const target = ev.target as HTMLElement;
+            if(target.closest("#input-submit")){
                 this.inputHandler();
             }
         })

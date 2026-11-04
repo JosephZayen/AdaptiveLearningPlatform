@@ -45,7 +45,7 @@ export class NetworkWidget implements NetworkInterface{
 
 
     askai(chatId, reasoningEffort) {
-        const messages = [];
+        const messages: Array<any> = [];
         const [msgOrder, msgDict] = this.getOrderAndDict(chatId);
         msgOrder.forEach((msgId)=>{
             messages.push(msgDict[msgId]);

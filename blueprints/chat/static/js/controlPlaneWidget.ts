@@ -1,29 +1,37 @@
-interface ConstructorOptions {
-    newChatBtn: HTMLElement;
-    newMessageFrameBtn: HTMLElement;
-    reasoningSelectTag: HTMLElement;
-};
- 
+import type {ControlPlaneWidgetInterface} from "./interface/controlPlaneInterface.ts";
+  
 //TODO: 如果说两个类相互依赖，初始化的时候需要引用彼此的方法，要怎么办
 
-export class ControlPlaneWidget{
+export class ControlPlaneWidget implements ControlPlaneWidgetInterface{
+
+    // DOM elements (first)
     newChatBtn: HTMLElement;
     newMessageFrameBtn: HTMLElement;
     reasoningSelectTag: HTMLElement;
-    setModelReasoning: Function;
-    addMsgFrame: Function;
-    highlightSidebarItem: Function;
-    appendSidebarItem: Function;
-    addEmptyChat: Function;
-    fetchNewChatId: Function;
-    renderChat: Function;
-    activeChatId: Number;
+
+    // dependency injection (second)
+    setModelReasoning!: (value: string) => void;
+    addMsgFrame!: (role: string, content: string) => void;
+    highlightSidebarItem!: () => void;
+    appendSidebarItem!: (chatId: number) => void;
+    addEmptyChat!: (chatId: number, systemMessage: unknown) => void;
+    fetchNewChatId!: () => Promise<number>;
+    setActiveChatId!: Function;
+    renderChat!: Function;
+    SYSTEM_MESSAGE_OBJECT: any;
 
 
-    constructor(options: ConstructorOptions){
+
+    constructor(options){
         this.newChatBtn = options.newChatBtn;
         this.newMessageFrameBtn = options.newMessageFrameBtn;
         this.reasoningSelectTag = options.reasoningSelectTag;
+        const store = options.store;
+        this.setActiveChatId = store.setActiveChatId;
+        const messagesArea = options.messagesArea;
+        this.renderChat = messagesArea.renderChat;
+        const configs = options.DataConfigs;
+        this.SYSTEM_MESSAGE_OBJECT = configs.SYSTEM_MESSAGE_OBJECT;
     }
 
     init(options){
@@ -52,35 +60,35 @@ export class ControlPlaneWidget{
             //初始化新聊天按钮的监听器
             const newChatBtn = this.newChatBtn;
             newChatBtn.addEventListener("click", async (ev)=>{
-                const target = ev.target.closest("#new-chat");
-                if(target){
+                const target = ev.target as HTMLElement;
+                if(target.closest("#new-chat")){
                     this.addChat();
                 }
             });
             //初始化新消息框的监听器
             const newMessageFrameBtn = this.newMessageFrameBtn;
             newMessageFrameBtn.addEventListener("click", (ev)=>{
-                const btn = ev.target.closest("#new-message-frame");
-                if(btn){
+                const btn = ev.target as HTMLElement;
+                if(btn.closest("#new-message-frame")){
                     this.addMsgFrame("user", "");
                 }
             });
             //初始化模型参数选择器的监听器
             const reasoningSelector = this.reasoningSelectTag;
             reasoningSelector.addEventListener("change", (ev)=>{
-                const rs = ev.target.closest("#reasoning-selector");
-                if(rs){
+                const rs = ev.target as HTMLElement;
+                if(rs.closest("#reasoning-selector")){
                     this.setModelReasoning(rs.getAttribute("value") || "disabled");
                 }
             })
-            resolve();
+            resolve(null);
         });
     }
 
     async addChat(){
         const chatId = await this.fetchNewChatId();
         this.addEmptyChat(chatId, this.SYSTEM_MESSAGE_OBJECT);
-        this.activeChatId = chatId;
+        this.setActiveChatId(chatId);
         this.appendSidebarItem(chatId);
         this.highlightSidebarItem();
         this.renderChat();

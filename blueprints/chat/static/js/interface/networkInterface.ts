@@ -1,10 +1,11 @@
 export interface NetworkInterface {
+    /*
     NEW_CHAT_PATH;
     ASK_AI_PATH;
     SUCCESS;
-    getOrderAndDict;
+    */
 
-
+    // methods
     init;
     fetchNewChatId;
     askai
