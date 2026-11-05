@@ -2,12 +2,16 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
+    //"rootDir": "./src",
+    //"outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
+
+    //module决定导入规则，nodenext强制MJS语法（.js/.mjs后缀）esnext可以无后缀或.js后缀
+    "module": "esnext",
+
+    //target决定转换成多旧的JS语法
     "target": "esnext",
     "types": [],
     // For nodejs:

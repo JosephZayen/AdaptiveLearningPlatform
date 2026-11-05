@@ -15,7 +15,8 @@ __pycache__
 #数据库
 *.sqlite
 .vscode
-/gsearch*
+*gesarch*
+*gseach*
 
 *.sqlite
 *.db

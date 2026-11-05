@@ -1,0 +1,1 @@
+{"version":3,"file":"boardWidget.d.mts","sourceRoot":"","sources":["../ts/boardWidget.mts"],"names":[],"mappings":"AAMA,qBAAa,WAAW;IAEpB,QAAQ,EAAE,GAAG,CAAC;IACd,OAAO,EAAE,GAAG,CAAC;IACb,YAAY,EAAE,GAAG,CAAC;IAClB,UAAU,EAAE,GAAG,CAAC;IAChB,YAAY,EAAE,GAAG,CAAC;IAClB,OAAO,EAAE,GAAG,CAAC;IAEb,cAEC;IAED,IAAI,CAAE,OAAO,KAAA,QAUZ;IASK,eAAe,qBA0BpB;CACJ"}
