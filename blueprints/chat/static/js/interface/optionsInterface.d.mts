@@ -13,5 +13,6 @@ export interface Options {
     network: NetworkInterface;
     sidebar: SidebarInterface;
     controlPlane: ControlPlaneWidgetInterface;
+    parseChats: any;
 }
 //# sourceMappingURL=optionsInterface.d.mts.map

@@ -1,3 +1,4 @@
+import type { Options } from "./interface/optionsInterface.mjs";
 export declare class BoardWidget {
     todayStr: any;
     setData: any;
@@ -6,7 +7,7 @@ export declare class BoardWidget {
     loadFromData: any;
     SUCCESS: any;
     constructor();
-    init(options: any): void;
+    init(options: Options): void;
     loadFromBackEnd(): Promise<unknown>;
 }
 //# sourceMappingURL=boardWidget.d.mts.map

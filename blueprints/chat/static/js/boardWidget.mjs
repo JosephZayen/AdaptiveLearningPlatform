@@ -12,13 +12,12 @@ export class BoardWidget {
     init(options) {
         //APIConfigs, store, network, mappers, messagesArea, sidebarWidget, controlPlaneWidget, inputWidget
         const store = options.store;
-        this.setData = store.setData;
+        this.setData = store.setData.bind(store);
         const network = options.network;
-        this.requestChats = network.requestChats;
-        const mappers = options.mappers;
-        this.parseChats = mappers.parseChats;
+        this.requestChats = network.requestChats.bind(network);
+        this.parseChats = options.parseChats;
         const messagesArea = options.messagesArea;
-        this.loadFromData = messagesArea.loadFromData;
+        this.loadFromData = messagesArea.loadFromData.bind(messagesArea);
     }
     /*
         这是初始化前端的逻辑，用来拉取数据，然后对前端进行初始化，

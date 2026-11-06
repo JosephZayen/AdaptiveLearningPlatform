@@ -22,20 +22,24 @@ export class ControlPlaneWidget {
     init(options) {
         //init configs
         const APIConfigs = options.API;
-        this.setModelReasoning = APIConfigs.setModelReasoning;
+        this.setModelReasoning = APIConfigs.setModelReasoning.bind(APIConfigs);
+        const dataConfigs = options.dataConfigs;
+        this.SYSTEM_MESSAGE_OBJECT = dataConfigs.SYSTEM_MESSAGE_OBJECT;
         //init messages widget
         const messagesArea = options.messagesArea;
-        this.addMsgFrame = messagesArea.addMsgFrame;
+        this.addMsgFrame = messagesArea.addMsgFrame.bind(messagesArea);
+        this.renderChat = messagesArea.renderChat.bind(messagesArea);
         //init sidebar widget
         const sidebar = options.sidebar;
-        this.highlightSidebarItem = sidebar.highlightSidebarItem;
-        this.appendSidebarItem = sidebar.appendSidebarItem;
+        this.highlightSidebarItem = sidebar.highlightSidebarItem.bind(sidebar);
+        this.appendSidebarItem = sidebar.appendSidebarItem.bind(sidebar);
         //init store object
         const store = options.store;
-        this.addEmptyChat = store.addEmptyChat;
+        this.addEmptyChat = store.addEmptyChat.bind(store);
+        this.setActiveChatId = store.setActiveChatId.bind(store);
         //init network object
         const network = options.network;
-        this.fetchNewChatId = network.fetchNewChatId;
+        this.fetchNewChatId = network.fetchNewChatId.bind(network);
         this.controlPlaneInit();
     }
     controlPlaneInit() {

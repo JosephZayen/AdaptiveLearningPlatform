@@ -20,12 +20,12 @@ export class BoardWidget {
     init (options: Options) {
         //APIConfigs, store, network, mappers, messagesArea, sidebarWidget, controlPlaneWidget, inputWidget
         const store = options.store;
-        this.setData = store.setData;
+        this.setData = store.setData.bind(store);
         const network = options.network;
-        this.requestChats = network.requestChats;
+        this.requestChats = network.requestChats.bind(network);
         this.parseChats = options.parseChats;
         const messagesArea = options.messagesArea;
-        this.loadFromData = messagesArea.loadFromData;
+        this.loadFromData = messagesArea.loadFromData.bind(messagesArea);
     }
 
     /*

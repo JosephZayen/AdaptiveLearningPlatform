@@ -19,7 +19,7 @@ export class NetworkWidget implements NetworkInterface{
         this.SUCCESS = macroConfigs.SUCCESS;
 
         const store = options.store;
-        this.getOrderAndDict = store.getOrderAndDict;
+        this.getOrderAndDict = store.getOrderAndDict.bind(store);
     }
     
     fetchNewChatId(){

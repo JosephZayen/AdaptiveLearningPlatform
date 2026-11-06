@@ -9,10 +9,10 @@ export class NetworkWidget {
         const API = options.API;
         this.NEW_CHAT_PATH = API.NEW_CHAT_PATH;
         this.ASK_AI_PATH = API.ASKAI_PATH;
-        const macroConfigs = options.macroConfigs;
+        const macroConfigs = options.macro;
         this.SUCCESS = macroConfigs.SUCCESS;
         const store = options.store;
-        this.getOrderAndDict = store.getOrderAndDict;
+        this.getOrderAndDict = store.getOrderAndDict.bind(store);
     }
     fetchNewChatId() {
         return fetch(this.NEW_CHAT_PATH, {

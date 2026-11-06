@@ -44,13 +44,24 @@ document.addEventListener("DOMContentLoaded", () => {
         store: store,
         network: network,
         sidebar: sidebar,
-        controlPlane: controlPlane
+        controlPlane: controlPlane,
+        parseChats: parseChats
     };
+    // debug info
+    try {
+        console.log(options);
+        console.log(sidebar);
+    }
+    catch (e) {
+        console.error(e);
+    }
     store.init(options);
     messagesWidget.init(options);
+    messagesWidget.messagesAreaInit();
     network.init(options);
     sidebar.init(options);
     inputWidget.init(options);
+    inputWidget.inputAreaInit();
     board.init(options);
     controlPlane.init(options);
     // DOMContentLoaded end

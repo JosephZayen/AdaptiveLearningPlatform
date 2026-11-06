@@ -13,27 +13,21 @@ export class MessagesAreaWidget {
     clearSidebar;
     appendSidebarItem;
     editMsg;
+    store;
     constructor(options) {
-        this.messagesArea = options.messagesAreaNode;
+        this.messagesArea = options.messagesArea;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
     }
     init(options) {
         const store = options.store;
-        this.getActiveChatId = store.getActiveChatId;
-        this.getData = store.getData;
-        this.setData = store.setData;
-        this.getChat = store.getChat;
-        this.getMsgDict = store.getMsgDict;
-        this.getMsgOrder = store.getMsgOrder;
-        this.editMsg = store.editMsg;
-        this.addMsg = store.addMsg;
-        const sidebar = options.sidebarWidget;
-        this.clearSidebar = sidebar.clearSidebar;
-        this.appendSidebarItem = sidebar.appendSidebarItem;
+        this.store = store;
+        const sidebar = options.sidebar;
+        this.clearSidebar = sidebar.clearSidebar.bind(sidebar);
+        this.appendSidebarItem = sidebar.appendSidebarItem.bind(sidebar);
     }
     //从data里面初始化
     loadFromData() {
-        const data = this.getData();
+        const data = this.store.getData();
         this.clearMessagesArea();
         this.clearSidebar();
         //挂载data中的chats到边栏
@@ -83,9 +77,9 @@ export class MessagesAreaWidget {
                 const editNode = target.closest(".message-edit-btn");
                 const delNode = target.closest(".message-delete-btn");
                 if (editNode) {
-                    const editor = editNode?.querySelector("message-editor");
+                    const editor = msgFrame.querySelector(".message-editor");
                     if (editNode.dataset.editing && editNode.dataset.editing === "true") {
-                        this.msgEditHandler(this.getActiveChatId(), msgId);
+                        this.msgEditHandler(this.store.getActiveChatId(), msgId);
                         editNode.dataset.editing === "false";
                         editor.setAttribute("contenteditable", "false");
                     }
@@ -95,7 +89,7 @@ export class MessagesAreaWidget {
                     }
                 }
                 else if (delNode) {
-                    this.msgDeleteHandler(this.getActiveChatId(), msgId);
+                    this.msgDeleteHandler(this.store.getActiveChatId(), msgId);
                 }
             }
         });
@@ -104,7 +98,7 @@ export class MessagesAreaWidget {
     msgEditHandler(chatId, msgId) {
         //这用到了CSS属性选择器，看一下CSS权威指南第二章
         const msgEditor = this.getMsgEditor(msgId);
-        this.editMsg(chatId, msgId, msgEditor.textContent);
+        this.store.editMsg(chatId, msgId, msgEditor.textContent);
         this.renderChat();
     }
     getMsgEditor(msgId) {
@@ -113,9 +107,9 @@ export class MessagesAreaWidget {
     //处理消息框删除事件
     //没调修改的API
     msgDeleteHandler(chatId, msgId) {
-        const chat = this.getChat(chatId);
-        const msgDict = this.getMsgDict(chatId);
-        const msgOrder = this.getMsgOrder(chatId);
+        const chat = this.store.getChat(chatId);
+        const msgDict = this.store.getMsgDict(chatId);
+        const msgOrder = this.store.getMsgOrder(chatId);
         delete msgDict[msgId];
         const newOrder = msgOrder.filter((x) => { x != msgId; });
         chat["chat-order"] = newOrder;
@@ -123,15 +117,15 @@ export class MessagesAreaWidget {
     }
     //给活跃聊天添加新消息， 这里只改内存状态
     addMsgFrame(role, content) {
-        this.addMsg(this.getActiveChatId(), role, content);
+        this.store.addMsg(this.store.getActiveChatId(), role, content);
         this.renderChat();
     }
     //通过顺序渲染活跃的聊天，只改DOM（不传chatId）
     renderChat() {
         this.messagesArea.innerHTML = "";
-        const activeChatId = this.getActiveChatId();
-        const msgOrder = this.getMsgOrder(activeChatId);
-        const msgDict = this.getMsgDict(activeChatId);
+        const activeChatId = this.store.getActiveChatId();
+        const msgOrder = this.store.getMsgOrder(activeChatId);
+        const msgDict = this.store.getMsgDict(activeChatId);
         const fragment = document.createDocumentFragment();
         msgOrder.forEach((msgId) => {
             const msg = msgDict[msgId];

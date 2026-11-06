@@ -19,30 +19,24 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
     clearSidebar;
     appendSidebarItem;
     editMsg;
+    store!: Options["store"];
 
     constructor(options){
-        this.messagesArea = options.messagesAreaNode;
+        this.messagesArea = options.messagesArea;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
     }
 
     init(options: Options){
         const store = options.store;
-        this.getActiveChatId = store.getActiveChatId;
-        this.getData = store.getData;
-        this.setData = store.setData;
-        this.getChat = store.getChat;
-        this.getMsgDict = store.getMsgDict;
-        this.getMsgOrder = store.getMsgOrder;
-        this.editMsg = store.editMsg;
-        this.addMsg = store.addMsg;
+        this.store = store;
         const sidebar = options.sidebar;
-        this.clearSidebar = sidebar.clearSidebar;
-        this.appendSidebarItem = sidebar.appendSidebarItem;
+        this.clearSidebar = sidebar.clearSidebar.bind(sidebar);
+        this.appendSidebarItem = sidebar.appendSidebarItem.bind(sidebar);
     }
 
     //从data里面初始化
     loadFromData(){
-        const data = this.getData();
+        const data = this.store.getData();
         this.clearMessagesArea();
         this.clearSidebar();
         //挂载data中的chats到边栏
@@ -57,6 +51,22 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
 
 
     //创建新的消息框，只是DOM，不涉及内存
+    /**
+     * @coupling #messages
+     * @level HIGH
+     * @reason 动态 HTML 插入，JS 依赖 DOM 结构及选择器
+     * @impact HTML 与 JS 结构变更需要同步维护
+     * @action 修改前检查双方依赖关系
+     * @todo 后续解耦
+     * 
+     * @structure
+     *  messages-frame
+     *      -message-control-area 控制区域
+     *          -message-edit-btn
+     *          -message-delete-btn
+     *      -message-editor 编辑真实文本
+     *  
+     */
     createMessageFrame(content){
 
         /*  TODO
@@ -91,6 +101,8 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
     }
 
     //创建消息框的监听器，包括编辑和删除监听器
+
+    
     messagesAreaInit(){
         this.messagesArea.addEventListener("click", (ev)=>{
             //我这ev.target没错吧
@@ -102,9 +114,9 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
                 const editNode = target.closest(".message-edit-btn");
                 const delNode = target.closest(".message-delete-btn");
                 if(editNode){
-                    const editor = editNode?.querySelector("message-editor");
+                    const editor = msgFrame.querySelector(".message-editor");
                     if(editNode.dataset.editing && editNode.dataset.editing === "true"){
-                        this.msgEditHandler(this.getActiveChatId(), msgId);
+                        this.msgEditHandler(this.store.getActiveChatId(), msgId);
                         editNode.dataset.editing === "false";
                         editor.setAttribute("contenteditable", "false");
                     } else {
@@ -112,7 +124,7 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
                         editor.setAttribute("contenteditable", "true");
                     }
                 } else if(delNode){
-                    this.msgDeleteHandler(this.getActiveChatId(), msgId);
+                    this.msgDeleteHandler(this.store.getActiveChatId(), msgId);
                 }
             }
         });
@@ -122,7 +134,7 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
     msgEditHandler(chatId, msgId){
         //这用到了CSS属性选择器，看一下CSS权威指南第二章
         const msgEditor = this.getMsgEditor(msgId);
-        this.editMsg(chatId, msgId, msgEditor.textContent);
+        this.store.editMsg(chatId, msgId, msgEditor.textContent);
         this.renderChat();
     }
 
@@ -133,9 +145,9 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
     //处理消息框删除事件
     //没调修改的API
     msgDeleteHandler(chatId, msgId){
-        const chat = this.getChat(chatId);
-        const msgDict = this.getMsgDict(chatId);
-        const msgOrder = this.getMsgOrder(chatId);
+        const chat = this.store.getChat(chatId);
+        const msgDict = this.store.getMsgDict(chatId);
+        const msgOrder = this.store.getMsgOrder(chatId) as any[];
         delete msgDict[msgId];
         const newOrder = msgOrder.filter((x)=>{x != msgId});
         chat["chat-order"] = newOrder;
@@ -144,16 +156,16 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
     
     //给活跃聊天添加新消息， 这里只改内存状态
     addMsgFrame(role, content){
-        this.addMsg(this.getActiveChatId(), role, content);
+        this.store.addMsg(this.store.getActiveChatId(), role, content);
         this.renderChat();
     }
 
     //通过顺序渲染活跃的聊天，只改DOM（不传chatId）
     renderChat(){
         this.messagesArea.innerHTML = "";
-        const activeChatId = this.getActiveChatId();
-        const msgOrder = this.getMsgOrder(activeChatId);
-        const msgDict = this.getMsgDict(activeChatId);
+        const activeChatId = this.store.getActiveChatId();
+        const msgOrder = this.store.getMsgOrder(activeChatId) as any[];
+        const msgDict = this.store.getMsgDict(activeChatId);
         const fragment = document.createDocumentFragment();
         msgOrder.forEach((msgId)=>{
             const msg = msgDict[msgId];

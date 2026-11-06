@@ -9,10 +9,10 @@ export class SidebarWidget {
     }
     init(options) {
         const store = options.store;
-        this.getActiveChatId = store.getActiveChatId;
-        this.setActiveChatId = store.setActiveChatId;
+        this.getActiveChatId = store.getActiveChatId.bind(store);
+        this.setActiveChatId = store.setActiveChatId.bind(store);
         const messagesArea = options.messagesArea;
-        this.renderChat = messagesArea.renderChat;
+        this.renderChat = messagesArea.renderChat.bind(messagesArea);
     }
     clearSidebar() {
         this.sidebar.innerHTML = "";
@@ -26,18 +26,20 @@ export class SidebarWidget {
     }
     sidebarListenerInit() {
         this.sidebar.addEventListener("click", (ev) => {
-            const chatItem = ev.target.closest(".sidebar-item");
-            if (chatItem) {
-                const chatId = chatItem.dataset.chatId;
-                this.setActiveChatId(chatId);
-                this.highlightSidebarItem();
-                this.renderChat();
+            if (ev.target instanceof Element) {
+                const chatItem = ev.target.closest(".sidebar-item");
+                if (chatItem) {
+                    const chatId = chatItem.dataset.chatId;
+                    this.setActiveChatId(chatId);
+                    this.highlightSidebarItem();
+                    this.renderChat();
+                }
             }
         });
     }
     highlightSidebarItem() {
         const activeChatId = this.getActiveChatId();
-        this.sidebar.childNodes.forEach((n) => {
+        Array.from(this.sidebar.children).forEach((n) => {
             n.classList.toggle("active", n.dataset.chatId === activeChatId);
         });
     }

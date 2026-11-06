@@ -11,18 +11,22 @@ export class InputAreaWidget {
     addMsgFrame!: (role: string, text: string) => void;
     renderChat!: () => void;
     askai;
+    store!: Options["store"];
+    API!: Options["API"];
 
     constructor (options){
-        this.inputBtn = options.inputBtnNode;
-        this.textArea = options.textAreaNode;
+        this.inputBtn = options.inputBtn;
+        this.textArea = options.textArea;
     }
 
     init(options: Options){
         const messagesArea = options.messagesArea;
-        this.addMsgFrame = messagesArea.addMsgFrame;
-        this.renderChat = messagesArea.renderChat;
+        this.addMsgFrame = messagesArea.addMsgFrame.bind(messagesArea);
+        this.renderChat = messagesArea.renderChat.bind(messagesArea);
         const network = options.network;
-        this.askai = network.askai;
+        this.askai = network.askai.bind(network);
+        this.store = options.store;
+        this.API = options.API;
     }
 
     /**
@@ -57,7 +61,7 @@ export class InputAreaWidget {
 
     //拿回AI回复数据，然后加数据（内存）
     async getRenderResponse(){
-        const responseText = await this.askai();
+        const responseText = await this.askai(this.store.getActiveChatId(), this.API.modelReasoning);
         this.addMsgFrame("assistant", responseText);
         this.renderChat();
     }

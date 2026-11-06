@@ -6,7 +6,7 @@ export class SidebarWidget implements SidebarInterface{
     getActiveChatId: any;
     setActiveChatId: any;
     renderChat: any;
-    sidebar: any;
+    sidebar: HTMLElement;
     
     constructor(sidebarNode){
         this.sidebar = sidebarNode;
@@ -14,10 +14,10 @@ export class SidebarWidget implements SidebarInterface{
 
     init(options: Options){
         const store = options.store;
-        this.getActiveChatId = store.getActiveChatId;
-        this.setActiveChatId = store.setActiveChatId;
+        this.getActiveChatId = store.getActiveChatId.bind(store);
+        this.setActiveChatId = store.setActiveChatId.bind(store);
         const messagesArea = options.messagesArea;
-        this.renderChat = messagesArea.renderChat;
+        this.renderChat = messagesArea.renderChat.bind(messagesArea);
     }
     
     clearSidebar(){
@@ -34,20 +34,22 @@ export class SidebarWidget implements SidebarInterface{
 
     sidebarListenerInit(){
         this.sidebar.addEventListener("click", (ev)=>{
-            const chatItem = ev.target.closest(".sidebar-item");
-            if(chatItem){
-                const chatId = chatItem.dataset.chatId;
-                this.setActiveChatId(chatId);
-                this.highlightSidebarItem();
-                this.renderChat();
+            if(ev.target instanceof Element){
+                const chatItem: HTMLElement = ev.target.closest(".sidebar-item") as HTMLElement;
+                if(chatItem){
+                    const chatId = chatItem.dataset.chatId;
+                    this.setActiveChatId(chatId);
+                    this.highlightSidebarItem();
+                    this.renderChat();
+                }
             }
         });
     }
 
     highlightSidebarItem(){
         const activeChatId = this.getActiveChatId();
-        this.sidebar.childNodes.forEach((n)=>{
-            n.classList.toggle("active", n.dataset.chatId === activeChatId);
+        Array.from(this.sidebar.children).forEach((n)=>{
+            n.classList.toggle("active", (n as HTMLElement).dataset.chatId === activeChatId);
         });
     }
 }

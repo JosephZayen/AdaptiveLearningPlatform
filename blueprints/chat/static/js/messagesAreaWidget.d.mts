@@ -1,4 +1,5 @@
 import type { MessagesAreaInterface } from "./interface/messagesInterface.mjs";
+import type { Options } from "./interface/optionsInterface.mjs";
 export declare class MessagesAreaWidget implements MessagesAreaInterface {
     messagesArea: any;
     getActiveChatId: any;
@@ -11,8 +12,9 @@ export declare class MessagesAreaWidget implements MessagesAreaInterface {
     clearSidebar: any;
     appendSidebarItem: any;
     editMsg: any;
+    store: Options["store"];
     constructor(options: any);
-    init(options: any): void;
+    init(options: Options): void;
     loadFromData(): void;
     clearMessagesArea(): void;
     createMessageFrame(content: any): HTMLDivElement;
