@@ -39,6 +39,22 @@ export class MessagesAreaWidget {
         this.messagesArea.innerHTML = "";
     }
     //创建新的消息框，只是DOM，不涉及内存
+    /**
+     * @coupling #messages
+     * @level HIGH
+     * @reason 动态 HTML 插入，JS 依赖 DOM 结构及选择器
+     * @impact HTML 与 JS 结构变更需要同步维护
+     * @action 修改前检查双方依赖关系
+     * @todo 后续解耦
+     *
+     * @structure
+     *  messages-frame
+     *      -message-control-area 控制区域
+     *          -message-edit-btn
+     *          -message-delete-btn
+     *      -message-editor 编辑真实文本
+     *
+     */
     createMessageFrame(content) {
         /*  TODO
             读一下伪元素那块，看懂下面这句话：
