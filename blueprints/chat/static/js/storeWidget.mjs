@@ -38,6 +38,16 @@ export class StoreWidget {
         const msgDict = this.getMsgDict(chatId);
         msgDict[msgId] = this.createUserMessage(newText);
     }
+    deleteMsg(chatId, msgId) {
+        const chat = this.getChat(chatId);
+        const msgDict = this.getMsgDict(chatId);
+        const msgOrder = this.getMsgOrder(chatId);
+        //删除字典存储
+        delete msgDict[msgId];
+        //删除顺序内对象
+        const newMsgOrder = msgOrder.filter((x) => { return x != msgId; });
+        chat["msg-order"] = newMsgOrder;
+    }
     //数据层：添加一个新的带有systemMessage对象（{role: ... content ...}）的chat
     addEmptyChat(chatId, systemMessage) {
         const msgOrder = [0];

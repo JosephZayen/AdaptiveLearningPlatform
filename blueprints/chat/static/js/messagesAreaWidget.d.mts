@@ -33,7 +33,7 @@ export declare class MessagesAreaWidget implements MessagesAreaInterface {
      *      -message-editor 编辑真实文本
      *
      */
-    createMessageFrame(content: any): HTMLDivElement;
+    createMessageFrame(msgId: number, content: string): HTMLDivElement;
     messagesAreaInit(): void;
     msgEditHandler(chatId: any, msgId: any): void;
     getMsgEditor(msgId: any): any;

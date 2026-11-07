@@ -32,6 +32,7 @@ export interface StoreInterface {
     getData: () => Data;
     addMsg: (chatId: number, role: string, inputText: string) => void;
     editMsg: (chatId: number, msgId: number, newText: string) => void;
+    deleteMsg: (chatId: number, msgId: number) => void;
     addEmptyChat: (chatId: number, systemMessage: object) => void;
     getOrderAndDict: (chatId: number) => Array<object>;
     getChat: (chatId: number) => object;

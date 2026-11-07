@@ -67,7 +67,7 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
      *      -message-editor 编辑真实文本
      *  
      */
-    createMessageFrame(content){
+    createMessageFrame(msgId: number, content: string){
 
         /*  TODO
             读一下伪元素那块，看懂下面这句话：
@@ -75,6 +75,7 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
         */
         const newMessageFrame = document.createElement("div");
         newMessageFrame.className = "message-frame";
+        newMessageFrame.dataset.msgId = String(msgId);
 
         //  复习一下relative, absolute定位，把下面这块搞好
 
@@ -117,10 +118,10 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
                     const editor = msgFrame.querySelector(".message-editor");
                     if(editNode.dataset.editing && editNode.dataset.editing === "true"){
                         this.msgEditHandler(this.store.getActiveChatId(), msgId);
-                        editNode.dataset.editing === "false";
+                        editNode.dataset.editing = "false";
                         editor.setAttribute("contenteditable", "false");
                     } else {
-                        editNode.dataset.editing === "true";
+                        editNode.dataset.editing = "true";
                         editor.setAttribute("contenteditable", "true");
                     }
                 } else if(delNode){
@@ -139,18 +140,13 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
     }
 
     getMsgEditor(msgId){
-        return this.messagesArea.querySelector(`[data-msg-id]=${msgId}`)?.querySelector(".message-editor");
+        return this.messagesArea.querySelector(`[data-msg-id=${msgId}]`)?.querySelector(".message-editor");
     }
 
     //处理消息框删除事件
     //没调修改的API
     msgDeleteHandler(chatId, msgId){
-        const chat = this.store.getChat(chatId);
-        const msgDict = this.store.getMsgDict(chatId);
-        const msgOrder = this.store.getMsgOrder(chatId) as any[];
-        delete msgDict[msgId];
-        const newOrder = msgOrder.filter((x)=>{x != msgId});
-        chat["chat-order"] = newOrder;
+        this.store.deleteMsg(chatId, msgId);
         this.renderChat();
     }
     
@@ -169,7 +165,7 @@ export class MessagesAreaWidget implements MessagesAreaInterface{
         const fragment = document.createDocumentFragment();
         msgOrder.forEach((msgId)=>{
             const msg = msgDict[msgId];
-            const msgFrame = this.createMessageFrame(msg["content"]); //msg["role"]这样的
+            const msgFrame = this.createMessageFrame(msgId, msg["content"]); //msg["role"]这样的
             fragment.appendChild(msgFrame);
         })
         this.messagesArea.appendChild(fragment);

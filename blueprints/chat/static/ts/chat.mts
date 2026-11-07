@@ -34,7 +34,7 @@ const inputWidget = new InputAreaWidget(inputOptions);
 
 //messages
 const messagesOptions = {messagesArea: messagesAreaNode, getMsgEditor: (msgId)=>{
-    return messagesAreaNode.querySelector(`[data-msg-id]=${msgId}`)?.querySelector(".message-editor");
+    return messagesAreaNode.querySelector(`[data-msg-id="${msgId}"]`)?.querySelector(".message-editor");
 }};
 const messagesWidget = new MessagesAreaWidget(messagesOptions);
 const board = new BoardWidget();
