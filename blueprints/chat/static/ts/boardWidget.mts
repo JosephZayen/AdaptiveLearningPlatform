@@ -26,6 +26,10 @@ export class BoardWidget {
         this.parseChats = options.parseChats;
         const messagesArea = options.messagesArea;
         this.loadFromData = messagesArea.loadFromData.bind(messagesArea);
+        const API = options.API;
+        this.todayStr = API.todayStr;
+        const macro = options.macro;
+        this.SUCCESS = macro.SUCCESS;
     }
 
     /*

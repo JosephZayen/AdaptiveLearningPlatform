@@ -13,6 +13,7 @@ export declare class MessagesAreaWidget implements MessagesAreaInterface {
     appendSidebarItem: any;
     editMsg: any;
     store: Options["store"];
+    network: Options["network"];
     constructor(options: any);
     init(options: Options): void;
     loadFromData(): void;

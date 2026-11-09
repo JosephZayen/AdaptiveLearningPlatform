@@ -14,6 +14,7 @@ export class MessagesAreaWidget {
     appendSidebarItem;
     editMsg;
     store;
+    network;
     constructor(options) {
         this.messagesArea = options.messagesArea;
         this.getMsgEditor = options.getMsgEditor ?? this.getMsgEditor;
@@ -24,6 +25,8 @@ export class MessagesAreaWidget {
         const sidebar = options.sidebar;
         this.clearSidebar = sidebar.clearSidebar.bind(sidebar);
         this.appendSidebarItem = sidebar.appendSidebarItem.bind(sidebar);
+        const network = options.network;
+        this.network = network;
     }
     //从data里面初始化
     loadFromData() {
@@ -116,6 +119,7 @@ export class MessagesAreaWidget {
         //这用到了CSS属性选择器，看一下CSS权威指南第二章
         const msgEditor = this.getMsgEditor(msgId);
         this.store.editMsg(chatId, msgId, msgEditor.textContent);
+        this.network.updateChat(chatId);
         this.renderChat();
     }
     getMsgEditor(msgId) {
@@ -125,11 +129,13 @@ export class MessagesAreaWidget {
     //没调修改的API
     msgDeleteHandler(chatId, msgId) {
         this.store.deleteMsg(chatId, msgId);
+        this.network.updateChat(chatId);
         this.renderChat();
     }
     //给活跃聊天添加新消息， 这里只改内存状态
     addMsgFrame(role, content) {
         this.store.addMsg(this.store.getActiveChatId(), role, content);
+        this.network.updateChat(this.store.getActiveChatId());
         this.renderChat();
     }
     //通过顺序渲染活跃的聊天，只改DOM（不传chatId）

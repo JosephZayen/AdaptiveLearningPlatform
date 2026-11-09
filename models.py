@@ -74,4 +74,3 @@ class ChatSession(Base):
 
 engine = create_engine("sqlite:///instance.sqlite")
 Base.metadata.create_all(engine)
-db_session = Session(engine)

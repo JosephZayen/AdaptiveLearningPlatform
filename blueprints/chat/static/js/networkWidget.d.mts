@@ -5,11 +5,13 @@ export declare class NetworkWidget implements NetworkInterface {
     ASK_AI_PATH: any;
     SUCCESS: any;
     getOrderAndDict: any;
+    todayStr: any;
+    UPDATE_PATH: any;
     constructor();
     init(options: Options): void;
     fetchNewChatId(): Promise<any>;
     askai(chatId: any, reasoningEffort: any): Promise<any>;
     requestChats(params: any): Promise<any>;
-    updateChat(): void;
+    updateChat(chatId: any): Promise<void>;
 }
 //# sourceMappingURL=networkWidget.d.mts.map

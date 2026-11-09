@@ -24,12 +24,13 @@ export class SidebarWidget implements SidebarInterface{
         this.sidebar.innerHTML = "";
     }
 
-    //插一个chatId的span标签到末尾
+    //插一个chatId的span标签到顶部
     appendSidebarItem(chatId){
         const chatSpan = document.createElement("span");
         chatSpan.dataset.chatId = chatId;
         chatSpan.textContent = chatId;
-        this.sidebar.appendChild(chatSpan);
+        chatSpan.classList.add("sidebar-item");
+        this.sidebar.insertAdjacentElement("afterbegin", chatSpan);
     }
 
     sidebarListenerInit(){

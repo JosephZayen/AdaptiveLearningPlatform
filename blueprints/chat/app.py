@@ -27,10 +27,12 @@ def update():
             data = request.get_json()
             chat_id = data["chat_id"]
             chat_json = data["msg_dict"]
+            chat_localDate = data["local_date"]
             stmt = select(ChatSession).where(ChatSession.id == chat_id).where(ChatSession.user_id == uid)
             chat_session = db_session.scalars(stmt).first()
             if(chat_session):
                 chat_session.json_data = chat_json
+                chat_session.local_date = chat_localDate
                 db_session.commit()
     except Exception as e:
         print(repr(e), traceback.format_exc())
@@ -63,7 +65,7 @@ def read_sessions():
         with database_session as db_session:
             uid = session["uid"]
             local_date = request.args.get("local_date")
-            stmt = select(ChatSession).where(ChatSession.user_id == uid).where(ChatSession.local_date == local_date)
+            stmt = select(ChatSession).where(ChatSession.user_id == uid) #.where(ChatSession.local_date == local_date)
             sessions_object = db_session.scalars(stmt)
             sessions_data = []
             for s in sessions_object:

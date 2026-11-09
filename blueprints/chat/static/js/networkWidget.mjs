@@ -1,14 +1,19 @@
+import { mkUpdateBody } from "./mappers.mjs";
 export class NetworkWidget {
     NEW_CHAT_PATH;
     ASK_AI_PATH;
     SUCCESS;
     getOrderAndDict;
+    todayStr;
+    UPDATE_PATH;
     constructor() {
     }
     init(options) {
         const API = options.API;
         this.NEW_CHAT_PATH = API.NEW_CHAT_PATH;
         this.ASK_AI_PATH = API.ASKAI_PATH;
+        this.todayStr = API.todayStr;
+        this.UPDATE_PATH = API.UPDATE_PATH;
         const macroConfigs = options.macro;
         this.SUCCESS = macroConfigs.SUCCESS;
         const store = options.store;
@@ -81,6 +86,29 @@ export class NetworkWidget {
             return response.json();
         });
     }
-    updateChat() { }
+    updateChat(chatId) {
+        const [chatOrder, msgDict] = this.getOrderAndDict(chatId);
+        const JSONBody = mkUpdateBody(chatId, msgDict, this.todayStr);
+        return fetch(this.UPDATE_PATH, {
+            method: "POST",
+            body: JSONBody,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then((res) => {
+            return res.json();
+        })
+            .then((resJson) => {
+            if (resJson.status === this.SUCCESS) { }
+            else {
+                throw new Error("status error");
+            }
+        })
+            .catch((reason) => {
+            console.error("error in network/updateChat");
+            console.error(reason);
+        });
+    }
 }
 //# sourceMappingURL=networkWidget.mjs.map

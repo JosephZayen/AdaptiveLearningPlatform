@@ -18,6 +18,10 @@ export class BoardWidget {
         this.parseChats = options.parseChats;
         const messagesArea = options.messagesArea;
         this.loadFromData = messagesArea.loadFromData.bind(messagesArea);
+        const API = options.API;
+        this.todayStr = API.todayStr;
+        const macro = options.macro;
+        this.SUCCESS = macro.SUCCESS;
     }
     /*
         这是初始化前端的逻辑，用来拉取数据，然后对前端进行初始化，

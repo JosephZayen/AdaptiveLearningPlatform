@@ -1,5 +1,5 @@
 from flask import render_template,request,session,redirect,url_for
-from models import User, Event, db_session, select
+from models import User, Event, select, engine, Session
 import json
 from . import calendar_bp
 from datetime import datetime 
@@ -40,6 +40,7 @@ def search_events():
     print("uid: ", uid)
     stmt = select(Event).join(User).where(Event.local_date == local_date).where(User.id == uid)
     events = []
+    db_session = Session(engine)
     for event in db_session.scalars(stmt):
         events.append({"timestamp": event.timestamp, "description":event.description, 
                        "id": event.id, "local_date": event.local_date})
@@ -60,6 +61,7 @@ def add_events():
     local_time = datetime.fromtimestamp( float(timestamp) / 1000 )
     y , m, d= local_time.year, local_time.month, local_time.day
     event = Event(user_id = uid, description = description, timestamp = timestamp, local_date=f"{y}-{m}-{d}")
+    db_session = Session(engine)
     db_session.add(event)
     db_session.commit()
     return json.dumps({"status": "success"}), 200

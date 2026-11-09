@@ -60,10 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
     messagesWidget.messagesAreaInit();
     network.init(options);
     sidebar.init(options);
+    sidebar.sidebarListenerInit();
     inputWidget.init(options);
     inputWidget.inputAreaInit();
     board.init(options);
     controlPlane.init(options);
+    board.loadFromBackEnd();
     // DOMContentLoaded end
 });
 //# sourceMappingURL=chat.mjs.map

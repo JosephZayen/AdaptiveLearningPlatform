@@ -22,6 +22,7 @@ export class SidebarWidget {
         const chatSpan = document.createElement("span");
         chatSpan.dataset.chatId = chatId;
         chatSpan.textContent = chatId;
+        chatSpan.classList.add("sidebar-item");
         this.sidebar.appendChild(chatSpan);
     }
     sidebarListenerInit() {
