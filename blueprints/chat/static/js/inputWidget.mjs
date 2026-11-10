@@ -39,15 +39,9 @@ export class InputAreaWidget {
     //我这里其实没写修改的
     inputHandler() {
         const inputText = this.textArea.value;
-        if (inputText) {
-            this.addMsgFrame("user", inputText);
-            this.renderChat();
-            this.getRenderResponse();
-        }
-        else {
-            this.addMsgFrame("user", "");
-            this.renderChat();
-        }
+        this.addMsgFrame("user", inputText);
+        this.renderChat();
+        this.getRenderResponse();
     }
     //拿回AI回复数据，然后加数据（内存）
     async getRenderResponse() {

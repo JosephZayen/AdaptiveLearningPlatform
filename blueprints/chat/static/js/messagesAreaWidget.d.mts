@@ -16,8 +16,6 @@ export declare class MessagesAreaWidget implements MessagesAreaInterface {
     network: Options["network"];
     constructor(options: any);
     init(options: Options): void;
-    loadFromData(): void;
-    clearMessagesArea(): void;
     /**
      * @coupling #messages
      * @level HIGH

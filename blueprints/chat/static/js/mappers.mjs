@@ -2,7 +2,6 @@
 export function parseChats(jsonChats) {
     try {
         const chats = JSON.parse(jsonChats);
-        console.log(chats);
         const data = {};
         for (let i = 0; i < chats.length; i++) {
             const chat = chats[i];

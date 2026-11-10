@@ -5,10 +5,12 @@ export declare class SidebarWidget implements SidebarInterface {
     setActiveChatId: any;
     renderChat: any;
     sidebar: HTMLElement;
+    store: Options["store"];
     constructor(sidebarNode: any);
     init(options: Options): void;
     clearSidebar(): void;
     appendSidebarItem(chatId: any): void;
+    loadFromData(): void;
     sidebarListenerInit(): void;
     highlightSidebarItem(): void;
 }

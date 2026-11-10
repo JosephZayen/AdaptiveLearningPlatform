@@ -28,19 +28,6 @@ export class MessagesAreaWidget {
         const network = options.network;
         this.network = network;
     }
-    //从data里面初始化
-    loadFromData() {
-        const data = this.store.getData();
-        this.clearMessagesArea();
-        this.clearSidebar();
-        //挂载data中的chats到边栏
-        for (const chatId of Object.keys(data).sort()) {
-            this.appendSidebarItem(chatId);
-        }
-    }
-    clearMessagesArea() {
-        this.messagesArea.innerHTML = "";
-    }
     //创建新的消息框，只是DOM，不涉及内存
     /**
      * @coupling #messages
@@ -78,10 +65,11 @@ export class MessagesAreaWidget {
         msgDeleteBtn.className = "message-delete-btn";
         msgDeleteBtn.textContent = "del";
         msgControlArea.appendChild(msgDeleteBtn);
-        const msgEditor = document.createElement("div");
+        const msgEditor = document.createElement("textarea");
         msgEditor.className = "message-editor";
         msgEditor.setAttribute("contenteditable", "false");
         msgEditor.textContent = content ?? "";
+        msgEditor.readOnly = true;
         newMessageFrame.appendChild(msgEditor);
         return newMessageFrame;
     }
@@ -94,21 +82,21 @@ export class MessagesAreaWidget {
             const msgFrame = target.closest(".message-frame");
             if (msgFrame) {
                 const msgId = parseInt(msgFrame.dataset.msgId);
-                const editNode = target.closest(".message-edit-btn");
-                const delNode = target.closest(".message-delete-btn");
-                if (editNode) {
+                const editBtn = target.closest(".message-edit-btn");
+                const delBtn = target.closest(".message-delete-btn");
+                if (editBtn) {
                     const editor = msgFrame.querySelector(".message-editor");
-                    if (editNode.dataset.editing && editNode.dataset.editing === "true") {
+                    if (editBtn.dataset.editing && editBtn.dataset.editing === "true") {
                         this.msgEditHandler(this.store.getActiveChatId(), msgId);
-                        editNode.dataset.editing = "false";
-                        editor.setAttribute("contenteditable", "false");
+                        editBtn.dataset.editing = "false";
+                        editor.readOnly = true;
                     }
                     else {
-                        editNode.dataset.editing = "true";
-                        editor.setAttribute("contenteditable", "true");
+                        editBtn.dataset.editing = "true";
+                        editor.readOnly = false;
                     }
                 }
-                else if (delNode) {
+                else if (delBtn) {
                     this.msgDeleteHandler(this.store.getActiveChatId(), msgId);
                 }
             }
@@ -118,12 +106,14 @@ export class MessagesAreaWidget {
     msgEditHandler(chatId, msgId) {
         //这用到了CSS属性选择器，看一下CSS权威指南第二章
         const msgEditor = this.getMsgEditor(msgId);
-        this.store.editMsg(chatId, msgId, msgEditor.textContent);
+        this.store.editMsg(chatId, msgId, msgEditor.value);
+        console.log("log");
+        console.log(this.store.getMsgDict(chatId));
         this.network.updateChat(chatId);
         this.renderChat();
     }
     getMsgEditor(msgId) {
-        return this.messagesArea.querySelector(`[data-msg-id=${msgId}]`)?.querySelector(".message-editor");
+        return this.messagesArea.querySelector(`[data-msg-id="${msgId}"]`)?.querySelector(".message-editor");
     }
     //处理消息框删除事件
     //没调修改的API

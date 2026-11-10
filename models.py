@@ -69,8 +69,5 @@ class ChatSession(Base):
     local_date: Mapped[Optional[str]]
     json_data: Mapped[Optional[str]]
 
-
-
-
 engine = create_engine("sqlite:///instance.sqlite")
 Base.metadata.create_all(engine)

@@ -7,6 +7,7 @@ export class SidebarWidget implements SidebarInterface{
     setActiveChatId: any;
     renderChat: any;
     sidebar: HTMLElement;
+    store!: Options["store"];
     
     constructor(sidebarNode){
         this.sidebar = sidebarNode;
@@ -14,6 +15,7 @@ export class SidebarWidget implements SidebarInterface{
 
     init(options: Options){
         const store = options.store;
+        this.store = store;
         this.getActiveChatId = store.getActiveChatId.bind(store);
         this.setActiveChatId = store.setActiveChatId.bind(store);
         const messagesArea = options.messagesArea;
@@ -30,7 +32,19 @@ export class SidebarWidget implements SidebarInterface{
         chatSpan.dataset.chatId = chatId;
         chatSpan.textContent = chatId;
         chatSpan.classList.add("sidebar-item");
-        this.sidebar.insertAdjacentElement("afterbegin", chatSpan);
+        this.sidebar.prepend(chatSpan);
+    }
+
+    //从data里面初始化sidebar
+    loadFromData(){
+        const data = this.store.getData();
+        this.clearSidebar();
+        //挂载data中的chats到边栏
+        console.log(data);
+        for (const chatId of Object.keys(data).sort((a, b)=>{return Number(a) - Number(b)})){
+            console.log(chatId);
+            this.appendSidebarItem(chatId);
+        }
     }
 
     sidebarListenerInit(){

@@ -4,11 +4,13 @@ export class SidebarWidget {
     setActiveChatId;
     renderChat;
     sidebar;
+    store;
     constructor(sidebarNode) {
         this.sidebar = sidebarNode;
     }
     init(options) {
         const store = options.store;
+        this.store = store;
         this.getActiveChatId = store.getActiveChatId.bind(store);
         this.setActiveChatId = store.setActiveChatId.bind(store);
         const messagesArea = options.messagesArea;
@@ -17,13 +19,24 @@ export class SidebarWidget {
     clearSidebar() {
         this.sidebar.innerHTML = "";
     }
-    //插一个chatId的span标签到末尾
+    //插一个chatId的span标签到顶部
     appendSidebarItem(chatId) {
         const chatSpan = document.createElement("span");
         chatSpan.dataset.chatId = chatId;
         chatSpan.textContent = chatId;
         chatSpan.classList.add("sidebar-item");
-        this.sidebar.appendChild(chatSpan);
+        this.sidebar.prepend(chatSpan);
+    }
+    //从data里面初始化sidebar
+    loadFromData() {
+        const data = this.store.getData();
+        this.clearSidebar();
+        //挂载data中的chats到边栏
+        console.log(data);
+        for (const chatId of Object.keys(data).sort((a, b) => { return Number(a) - Number(b); })) {
+            console.log(chatId);
+            this.appendSidebarItem(chatId);
+        }
     }
     sidebarListenerInit() {
         this.sidebar.addEventListener("click", (ev) => {

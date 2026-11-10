@@ -1,7 +1,5 @@
 export interface MessagesAreaInterface {
     init: any;
-    loadFromData: any;
-    clearMessagesArea: any;
     createMessageFrame: any;
     messagesAreaInit: any;
     msgEditHandler: any;

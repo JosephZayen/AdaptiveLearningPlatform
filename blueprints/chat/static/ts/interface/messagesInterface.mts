@@ -19,8 +19,6 @@ export interface MessagesAreaInterface {
 
     //方法
     init;
-    loadFromData;
-    clearMessagesArea;
     createMessageFrame;
     messagesAreaInit;
     msgEditHandler;

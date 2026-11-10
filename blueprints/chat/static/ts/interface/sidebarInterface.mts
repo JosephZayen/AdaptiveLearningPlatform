@@ -12,4 +12,5 @@ export interface SidebarInterface {
     appendSidebarItem(chatId: number): void;
     sidebarListenerInit(): void;
     highlightSidebarItem(): void;
+    loadFromData(): void;
 }

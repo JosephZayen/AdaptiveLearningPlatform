@@ -16,8 +16,8 @@ export class BoardWidget {
         const network = options.network;
         this.requestChats = network.requestChats.bind(network);
         this.parseChats = options.parseChats;
-        const messagesArea = options.messagesArea;
-        this.loadFromData = messagesArea.loadFromData.bind(messagesArea);
+        const sidebar = options.sidebar;
+        this.loadFromData = sidebar.loadFromData.bind(sidebar);
         const API = options.API;
         this.todayStr = API.todayStr;
         const macro = options.macro;

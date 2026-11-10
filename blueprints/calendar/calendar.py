@@ -4,8 +4,6 @@ import json
 from . import calendar_bp
 from datetime import datetime 
 
-
-
 def current_user_id():
     uid = session.get("uid")
     return uid
