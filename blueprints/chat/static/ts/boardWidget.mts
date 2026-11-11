@@ -18,7 +18,6 @@ export class BoardWidget {
     }
 
     init (options: Options) {
-        //APIConfigs, store, network, mappers, messagesArea, sidebarWidget, controlPlaneWidget, inputWidget
         const store = options.store;
         this.setData = store.setData.bind(store);
         const network = options.network;
@@ -40,32 +39,38 @@ export class BoardWidget {
     */
 
     async loadFromBackEnd () {
-        return new Promise((resolve)=>{
-            //拉取所有聊天数据，加载到this.data里面
-            const params = new URLSearchParams();
-            params.append("local_date", this.todayStr);
-            const response = this.requestChats(params);
-            response.then((responseObject)=>{
+        //拉取所有聊天数据，加载到this.data里面
+        const params = new URLSearchParams();
+        params.append("local_date", this.todayStr);
+        const MAX_RETRIES = 3;
+        let retriesCount = 0;
+        while(retriesCount <= MAX_RETRIES){
+            try{
+                const responseObject = await this.requestChats(params);
                 if(responseObject.status === this.SUCCESS){
                     const newData = this.parseChats(responseObject.content);
                     this.setData(newData);
-                    //LOG ----------------------------------------------------------------------------------------
-                    /*
-                    console.log(newData);
-                    console.log(typeof newData);
-                    console.log(newData);
-                    */
+                    this.loadFromData();
+                    return;
                 } else {
                     //TODO 这里怎么加重试啊
+                    // ANSWER 使用同步代码，而非异步递归重试，类同步async + await的意义在于能使用try catch捕获异常，而不需要处理异步无法传递给同步处理机制的这个特点
                     this.setData({});
-                    console.error("RESPONSE STATUS ERROR");
-                    throw new Error("response status error");
+                    throw new Error("response status error in loadFromBackEnd");
                 }
-                this.loadFromData();
-                resolve(null);
-            })
-        })
+            } catch (reason){
+                console.log(reason);
+                retriesCount++;
+                if(retriesCount > MAX_RETRIES){
+                    throw reason;
+                }
+                await new Promise((resolve)=>{
+                    setTimeout(resolve, 1000);
+                });
+            }
+        }
     }
+
 }
 
 //如何数字转字符串
