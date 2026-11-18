@@ -28,3 +28,126 @@ session能够让用户持有的密钥足够稀疏，从而能够保证是用户�
 而HTML部分只需要保存一个映射即可（但是是取用的static内的JS），也就是说，把TS放到一块方便互相引用，但是编译还是编译到static内部
 
 然后后端部分做成services
+
+
+
+
+
+
+
+
+frontend/
+│
+├── shared/
+│   ├── types/
+│   │   ├── message.ts
+│   │   └── api.ts
+│   │
+│   ├── components/
+│   │   ├── MessagesArea.ts
+│   │   ├── Input.ts
+│   │   └── ChatPanel.ts
+│   │
+│   ├── chat/
+│   │   ├── Store.ts
+│   │   ├── Network.ts
+│   │   └── ControlPlane.ts
+│   │
+│   └── utils/
+│       └── ...
+│
+├── features/
+│   ├── chat/
+│   │   ├── main.ts
+│   │   └── chat.css
+│   │
+│   └── paper_checker/
+│       ├── main.ts
+│       ├── PaperChecker.ts
+│       └── paper_checker.css
+│
+└── ...
+
+
+
+
+
+
+
+
+project/
+│
+├── app/
+│   │
+│   ├── blueprints/
+│   │   ├── chat/
+│   │   └── paper_checker/
+│   │
+│   ├── services/
+│   │   ├── ai_service.py
+│   │   ├── chat_service.py
+│   │   └── paper_checker_service.py
+│   │
+│   ├── models/
+│   │
+│   └── extensions.py
+│
+├── frontend/
+│   │
+│   ├── shared/
+│   │   ├── components/
+│   │   ├── chat/
+│   │   ├── types/
+│   │   └── utils/
+│   │
+│   └── features/
+│       ├── chat/
+│       └── paper_checker/
+│
+├── static/
+│   ├── js/
+│   └── css/
+│
+└── templates/
+    ├── chat/
+    └── paper_checker/
+
+
+
+
+
+
+project/
+├── app/
+│   ├── blueprints/
+│   │   ├── chat/
+│   │   └── paper_checker/
+│   │
+│   └── services/
+│
+├── frontend/
+│   ├── shared/
+│   │   ├── chat/
+│   │   │   ├── Store.ts
+│   │   │   ├── Network.ts
+│   │   │   └── ControlPlane.ts
+│   │   └── components/
+│   │       ├── MessagesArea.ts
+│   │       └── Input.ts
+│   │
+│   └── features/
+│       ├── chat/
+│       │   └── main.ts
+│       └── paper_checker/
+│           └── main.ts
+│
+├── static/
+│   └── js/                 # TS 编译输出
+│       ├── shared/
+│       └── features/
+│
+└── templates/
+    ├── chat/
+    │   └── index.html
+    └── paper_checker/
+        └── index.html
