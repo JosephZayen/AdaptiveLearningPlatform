@@ -7,7 +7,7 @@ export async function showNotification(title, options = {}) {
   const swReg = navigator.serviceWorker?.controller
   ? await navigator.serviceWorker.getRegistration()
   : null;
-  if (swReg !== null){
+  if (swReg){
     await swReg.showNotification(title, options);
   } else{
     new Notification(title, options);

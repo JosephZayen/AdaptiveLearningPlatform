@@ -4,6 +4,15 @@ import {getData} from "./fetch.mjs";
 import * as configs from "./configs.mjs";
 
 export class Calendar{
+    table;
+    canvas;
+    prevMonth;
+    nextMonth;
+    now;
+    maxDays;
+    selected;
+    mapping;
+
     constructor(table, canvas, prevMonth, nextMonth){
         const today = new Date();
         const now = new Date(today.getFullYear(), today.getMonth(), 1);

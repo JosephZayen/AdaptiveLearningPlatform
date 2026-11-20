@@ -1,5 +1,11 @@
 import * as configs from "./configs.mjs";
 
+interface RequestOptions {
+    method: string,
+    headers?: Record<string, string>,
+    body?: any;
+}
+
 export async function getData(url, method, body, type){
     /**
      * Params
@@ -8,7 +14,7 @@ export async function getData(url, method, body, type){
      *  body: object
      *  type: "json" | blob | other
      */
-    const options = {
+    const options: RequestOptions = {
         method: String(method),
     };
 

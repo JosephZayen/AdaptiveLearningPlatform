@@ -12,7 +12,7 @@ None
 
 from openai import OpenAI
 import os
-from .configs import configs
+from .config import configs
 
 client = OpenAI(
     api_key = os.environ.get("DEEPSEEK_API_KEY"),

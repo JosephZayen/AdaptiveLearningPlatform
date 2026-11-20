@@ -9,6 +9,3 @@ configs = {
     "success_status": 0,
     "failure_status": 1
 }
-
-json_configs = json.dumps(configs, ensure_ascii=False)
-CONFIGS_PATH.write_text(json_configs, encoding="utf-8")

@@ -3,7 +3,7 @@ from src.app.models import User, select, Session, engine
 from werkzeug.security import check_password_hash,generate_password_hash
 from config.project_path import STATIC_FOLDER, TEMPLATES_FOLDER
 
-auth_bp = Blueprint(name="auth_bp", import_name=__name__, static_folder=STATIC_FOLDER, template_folder=TEMPLATES_FOLDER, url_prefix="/auth")
+auth_bp = Blueprint(name="auth_bp", import_name=__name__, static_folder=str(STATIC_FOLDER.resolve()), template_folder=str(TEMPLATES_FOLDER.resolve()), url_prefix="/auth")
 
 @auth_bp.route("/login",methods=["GET","POST"])
 def login():

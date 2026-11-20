@@ -14,7 +14,7 @@ from src.app.models import engine
 from flask import jsonify, current_app
 import traceback
 import json
-from .configs import configs
+from .config import configs
 from src.app.main import AIInterface
 
 SUCCESS = configs.get("success_status")
