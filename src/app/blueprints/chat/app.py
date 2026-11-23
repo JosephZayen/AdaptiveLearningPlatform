@@ -1,5 +1,5 @@
-from src.app.models import  select, User, ChatSession, Session
-from src.app.models import engine
+from app.models import  select, User, ChatSession, Session
+from app.models import engine
 from flask import Blueprint, session, request, redirect, url_for, jsonify, render_template, current_app
 import traceback
 import json

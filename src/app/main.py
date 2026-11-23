@@ -1,9 +1,9 @@
 from flask import Flask, render_template, url_for, redirect
-from src.app.blueprints.auth import auth_bp
-from src.app.blueprints.calendar import calendar_bp
-from src.app.blueprints.chat import chat_bp
-from src.app.blueprints.auth import auth_bp
-from src.app.blueprints.calendar import calendar_bp
+from app.blueprints.auth import auth_bp
+from app.blueprints.calendar import calendar_bp
+from app.blueprints.chat import chat_bp
+from app.blueprints.auth import auth_bp
+from app.blueprints.calendar import calendar_bp
 # 两个类要传给路由模块导入，用于静态类型检查
 #from os import urandom
 

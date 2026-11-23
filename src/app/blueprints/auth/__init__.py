@@ -1,5 +1,5 @@
 from flask import Blueprint,request,redirect,url_for,render_template,session,flash
-from src.app.models import User, select, Session, engine
+from app.models import User, select, Session, engine
 from werkzeug.security import check_password_hash,generate_password_hash
 from config.project_path import STATIC_FOLDER, TEMPLATES_FOLDER
 

@@ -7,7 +7,7 @@ import time
 import traceback
 from random import randint
 from flask import current_app
-from src.app.types import AIInterface 
+from app.types import AIInterface 
 from app.services.create_textbook.core.config.prompt_config import CHAPTER_USER_PROMPT
 from .config.config import MAX_RETRIES
 from app.services.create_textbook.core.config.types_config import InnerTextbook, InnerChapter, Chapter
