@@ -1,2 +1,2 @@
-from app.services.chat_services import ChatManager
-from app.services.ai_interface import AIInterface
+from services.chat_services import ChatManager
+from services.ai_interface import AIInterface

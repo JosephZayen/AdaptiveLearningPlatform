@@ -1,5 +1,5 @@
 from flask import render_template,request,session,redirect,url_for
-from app.models import User, Event, select, engine, Session
+from models import User, Event, select, engine, Session
 import json
 from . import calendar_bp
 from datetime import datetime 
