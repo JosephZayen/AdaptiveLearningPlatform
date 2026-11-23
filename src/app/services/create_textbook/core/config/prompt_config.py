@@ -1,32 +1,16 @@
+from app.services.create_textbook.core.config.types_config import CHAPTER_SCHEMA
 
-class Config():
-    """
-    把args塞到对象里面整成键值对
-    """
-    def __init__(self):
-        self._settings = {}
+CHAPTER_USER_PROMPT = r"""
+以下是你这一次生成该教材章节所需的章节内容:
 
-    def init_from_textbook(self,args):
-        """
-        从教材参数初始化
-        """
-        arg_names = vars(args).keys()
-        for name in arg_names:
-            self._settings[name] = getattr(args, name, None)
+{chapter_index}
+""".strip()
 
-    def init_from_coding(self,args):
-        """
-        从编程参数初始化
-        """
-        arg_names = vars(args).keys()
-        for name in arg_names:
-            self._settings[name] = getattr(args, name, None)
+r"""章节模板字符串（注入在用户消息中）
 
-    def get_arg(self, arg: str):
-        """
-        获取参数
-        """
-        return self._settings.get(arg, None)
+Placeholders:
+    chapter_index: chapter content.
+"""
 
 
 TEXTBOOK_PROMPT = r'''
@@ -74,46 +58,6 @@ Placeholders:
 """
 
 
-CHINESE_TEXTBOOK_PROMPT = r'''
-#身份
-你是一位中国{identity}教授
-
-#任务
-你将被提供一段{textbook}教材目录，你
-将使用你的学科知识，为我提供详细而深入的讲解
-
-#指导原则
-1.尽可能提供详细的讲解
-2.先进行推理，确认哪些知识点不可遗漏
-3.先进行宏观介绍，为我提供大体的理解，然后给出细致而深入的讲解
-4.准确使用中国本土教材的术语，避免“生硬翻译”
-5.不同步骤/输出结构之间使用-------隔开
-
-#步骤
-1.推理
-2.宏观介绍
-3.深入讲解
-
-#输出结构
--------
-1.宏观介绍
--------
-2.深入讲解
--------
-3.练习题
--------
-
-{output_format}
-
-#注意
-1.输出的不同部分，以及这些部分的开头和结尾，使用-------间隔符隔开。
-'''.strip()
-
-# CHINESE_TEXTBOOK_PROMPT注释
-"""
-
-
-"""
 
 
 CODING_PROMPT = r'''
@@ -162,9 +106,12 @@ Placeholders:
 """
 
 
-OUTPUT_FORMAT = r'''
+OUTPUT_FORMAT = rf'''
 格式要求：
 1.公式使用 \( \)作为分隔符，用于katex渲染
 2.使用markdown格式，用于mark-it-down渲染
 3.公式内禁止使用中文，使用正确的latex
+
+使用以下JSON SCHEMA:
+{CHAPTER_SCHEMA}
 '''

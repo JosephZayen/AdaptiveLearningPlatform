@@ -23,6 +23,8 @@ class AIInterface():
     """
     interface for ai models
     """
+    def __init__(self):
+        self.client = client
     def get_response(self, messages, reasoning):
         reasoning = reasoning if (reasoning in ["enabled", "disabled"]) else "enabled"
         try:

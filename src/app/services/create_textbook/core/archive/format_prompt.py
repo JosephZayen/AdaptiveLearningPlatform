@@ -1,6 +1,3 @@
-from gen import gen_textbook
-from .prompt_config import Config, TEXTBOOK_PROMPT, CODING_PROMPT, CHINESE_TEXTBOOK_PROMPT, OUTPUT_FORMAT
-import argparse
 
 def build_parser():
     parser = argparse.ArgumentParser()
@@ -18,7 +15,7 @@ def build_parser():
 
     return parser
 
-def format_prompt(args):
+def format_sysprompt(args):
     config = Config()
     if args.command == "textbook":
         config.init_from_textbook(args)
