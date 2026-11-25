@@ -7,7 +7,9 @@ name = "AdaptiveLearningPlatform"
 version = "2026.11.16"
 dependencies = [
     "Flask",
-    "SQLAlchemy"
+    "SQLAlchemy",
+    "celery",
+    "openai"
 ]
 requires-python = ">=3.12"
 readme = "README.md"

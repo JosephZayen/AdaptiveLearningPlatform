@@ -9,8 +9,8 @@ dependencies:
 registered ai_interface service
 """
 
-from app.models import  select, User, ChatSession, Session
-from app.models import engine
+from app.models.models import  select, User, ChatSession, Session
+from app.models.models import engine
 from flask import jsonify, current_app
 import traceback
 import json
