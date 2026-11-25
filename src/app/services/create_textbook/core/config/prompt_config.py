@@ -1,4 +1,4 @@
-from services.create_textbook.core.config.types_config import CHAPTER_SCHEMA
+from app.services.create_textbook.core.config.types_config import CHAPTER_SCHEMA
 
 CHAPTER_USER_PROMPT = r"""
 以下是你这一次生成该教材章节所需的章节内容:

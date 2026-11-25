@@ -1,11 +1,11 @@
-from models import  select, User, ChatSession, Session
-from models import engine
+from app.models import  select, User, ChatSession, Session
+from app.models import engine
 from flask import Blueprint, session, request, redirect, url_for, jsonify, render_template, current_app
 import traceback
 import json
 from .configs import configs
 #用于静态类型检查器
-from types import ChatManager, AIInterface
+from app.types import ChatManager, AIInterface
 from config.project_path import STATIC_FOLDER, TEMPLATES_FOLDER
 
 

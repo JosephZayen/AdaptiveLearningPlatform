@@ -9,13 +9,13 @@ dependencies:
 registered ai_interface service
 """
 
-from models import  select, User, ChatSession, Session
-from models import engine
+from app.models import  select, User, ChatSession, Session
+from app.models import engine
 from flask import jsonify, current_app
 import traceback
 import json
 from .config import configs
-from main import AIInterface
+from app.main import AIInterface
 
 SUCCESS = configs.get("success_status")
 FAILURE = configs.get("failure_status")

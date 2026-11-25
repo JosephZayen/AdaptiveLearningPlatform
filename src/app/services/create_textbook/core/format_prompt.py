@@ -3,7 +3,7 @@
 """
 
 
-from services.create_textbook.core.book_generator import gen_textbook
+from app.services.create_textbook.core.book_generator import gen_textbook
 from .config.prompt_config import Config, TEXTBOOK_PROMPT, CODING_PROMPT, CHAPTER_USER_PROMPT, OUTPUT_FORMAT
 
 

@@ -7,10 +7,10 @@ import time
 import traceback
 from random import randint
 from flask import current_app
-from types import AIInterface 
-from services.create_textbook.core.config.prompt_config import CHAPTER_USER_PROMPT
+from app.types import AIInterface 
+from app.services.create_textbook.core.config.prompt_config import CHAPTER_USER_PROMPT
 from .config.config import MAX_RETRIES
-from services.create_textbook.core.config.types_config import InnerTextbook, InnerChapter, Chapter
+from app.services.create_textbook.core.config.types_config import InnerTextbook, InnerChapter, Chapter
 import concurrent.futures
 
 AIInterfaceClass = current_app.extensions["ai_interface"]
